@@ -30,7 +30,24 @@ export class Dust extends Perticles {
 }
 
 export class Splash extends Perticles {
-    
+    constructor(game, x, y){
+        super(game);   
+        this.size = Math.random() * 100 + 50;
+        this.x = x - this.size * 0.4;
+        this.y = y - this.size * 0.5; 
+        this.speedX = Math.random() * 6 - 4;
+        this.speedY = Math.random() * 2 + 1; 
+        this.gravity = 0; 
+        this.image = document.getElementById("fire");
+    } 
+    update(){
+        super.update();
+        this.gravity += 0.1; 
+        this.y += this.gravity;
+    }
+    draw(context){
+        context.drawImage(this.image, this.x, this.y, this.size, this.size);
+    }
 }
 
 export class Fire extends Perticles {

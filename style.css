@@ -13,8 +13,15 @@
         transform: translate(-50%, -50%);
         max-width: 100%;
         max-height: 100%;
+        font-family: "Pixelify Sans", cursive;
+        /* .pixelify-sans-<uniquifier> {
+            font-family: "Pixelify Sans", sans-serif;
+            font-optical-sizing: auto;
+            font-weight: 400;
+            font-style: normal;
+          } */
     }
     
-    #player, #layer1, #layer2, #layer3, #layer4, #layer5, #enemy_fly, #enemy_plant, #enemy_spider_big, #fire {
+    #player, #layer1, #layer2, #layer3, #layer4, #layer5, #enemy_fly, #enemy_plant, #enemy_spider_big, #fire, #collisionAnimation, #heart {
         display: none;
     }
