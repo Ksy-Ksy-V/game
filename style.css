@@ -11,10 +11,11 @@ html {
 	overflow: hidden;
 	width: 100%;
 	height: 100%;
+	background-color: #f9cfe9;
 }
 
 #canvas1 {
-	border: 5px solid black;
+	border: 5px solid 050f07;
 	display: block;
 	position: absolute;
 	top: 0;
@@ -37,4 +38,102 @@ html {
 #collisionAnimation,
 #heart {
 	display: none;
+}
+
+#startScreen {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 600px;
+	height: 400px;
+	background-color: #ffb2e2;
+	color: #14000c;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	font-family: 'Pixelify Sans', cursive;
+	transform: translate(-50%, -50%);
+	border: 4px solid #ffd8ef;
+	border-radius: 10px;
+	z-index: 10;
+	box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5);
+}
+
+.action-controls li {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+.controls-container {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 50px;
+	margin-top: 50px;
+}
+
+.move-controls {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.horizontal-keys {
+	display: flex;
+	justify-content: space-between;
+	width: 150px;
+	margin-top: 10px;
+}
+
+.key {
+	width: 50px;
+	height: 50px;
+	background-color: #ffb2e2;
+	color: #14000c;
+	font-size: 18px;
+	font-weight: bold;
+	text-align: center;
+	line-height: 50px;
+	border-radius: 5px;
+	box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+	border: 4px solid #ffd8ef;
+}
+
+.key:last-child {
+	margin-right: 0;
+}
+
+.action-controls .key {
+	width: 100px;
+	height: 40px;
+	line-height: 40px;
+	margin-right: 10px;
+}
+
+.space-key {
+	width: 200px;
+	margin-left: 10px;
+	margin-bottom: 10px;
+}
+
+#startScreen button {
+	font-size: 24px;
+	padding: 10px 20px;
+	cursor: pointer;
+	background-color: #ffd8ef;
+	border: none;
+	border-radius: 5px;
+	color: #14000c;
+	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+	transition: background-color 0.3s ease;
+	font-family: 'Pixelify Sans', cursive;
+}
+
+#startScreen button:hover {
+	background-color: #fe69c6;
 }

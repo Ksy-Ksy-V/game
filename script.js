@@ -121,5 +121,9 @@ window.addEventListener('load', function () {
 		game.draw(ctx);
 		if (!game.gameOver) requestAnimationFrame(animate);
 	}
-	animate(0);
+
+	startButton.addEventListener('click', function () {
+		startScreen.style.display = 'none';
+		animate(0);
+	});
 });
