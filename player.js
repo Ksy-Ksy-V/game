@@ -80,6 +80,13 @@ export class Player {
 			this.frameTimer += deltaTime;
 		}
 	}
+
+	// restart() {
+	// 	this.x = 100;
+	// 	this.y = this.gameHeight - this.height;
+	// 	this.maxFrame = 8;
+	// 	this.frameY = 0;
+	// }
 	draw(context) {
 		if (this.game.debug)
 			context.strokeRect(this.x, this.y, this.width, this.height);
@@ -121,9 +128,6 @@ export class Player {
 						enemy.y + enemy.height * 0.5
 					)
 				);
-				if (this.currentState === this.states[7]) {
-					this.game.GamePause = true;
-				}
 				if (
 					this.currentState === this.states[4] ||
 					this.currentState === this.states[5]

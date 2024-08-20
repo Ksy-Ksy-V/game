@@ -4,7 +4,6 @@ export class InputHandler {
 		this.keys = [];
 
 		window.addEventListener('keydown', (e) => {
-			console.log(e.key, this.keys);
 			if (
 				(e.key === 'ArrowDown' ||
 					e.key === 'ArrowUp' ||
@@ -16,8 +15,10 @@ export class InputHandler {
 				this.keys.push(e.key);
 			} else if (e.key === 'd') {
 				this.game.debug = !this.game.debug;
-			} else if (e.key === ' ') {
-				this.game.isPaused = !this.game.isPaused;
+			} else if (e.key === 'Escape') {
+				this.game.gamePause = !this.game.gamePause;
+			} else if (e.key === 'Backspace') {
+				this.game.gameRestart = !this.game.gameRestart;
 			}
 		});
 

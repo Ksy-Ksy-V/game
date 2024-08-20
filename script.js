@@ -36,14 +36,18 @@ window.addEventListener('load', function () {
 			this.maxTime = 30000;
 			this.gameOver = false;
 			this.gamePause = false;
+			this.gameRestart = false;
 			this.hearts = 5;
 			this.player.currentState = this.player.states[0];
 			this.player.currentState.enter();
 		}
 
 		update(deltaTime) {
+			// if (!this.gameStart) return;
+
 			this.time += deltaTime;
 			if (this.time > this.maxTime) this.gameOver = true;
+
 			this.background.update();
 			this.player.update(this.input.keys, deltaTime);
 			// handleEnemies
@@ -108,6 +112,27 @@ window.addEventListener('load', function () {
 			else if (this.speed > 0) this.enemies.push(new ClimbingEnemy(this));
 			this.enemies.push(new FlyingEnemy(this));
 		}
+
+		restartGame() {
+			this.groundMargin = 50;
+			this.speed = 0;
+			this.enemies = [];
+			this.particles = [];
+			this.collisions = [];
+			this.floatingMessages = [];
+			this.maxParticles = 50;
+			this.enemyTimer = 0;
+			this.enemyInterval = 1000;
+			this.score = 0;
+			this.time = 0;
+			this.gameOver = false;
+			this.gamePause = false;
+			this.gameRestart = false;
+			this.hearts = 5;
+			this.player.currentState = this.player.states[0];
+			this.player.x = 0;
+			this.player.currentState.enter();
+		}
 	}
 
 	const game = new Game(canvas.width, canvas.height);
@@ -117,17 +142,23 @@ window.addEventListener('load', function () {
 		const deltaTime = timeStamp - lastTime;
 		lastTime = timeStamp;
 
-		if (!game.isPaused) {
+		if (!game.gamePause) {
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
 			game.update(deltaTime);
 			game.draw(ctx);
+			pauseScreen.style.display = 'none';
+		}
+
+		if (game.gamePause) {
+			pauseScreen.style.display = 'block';
+		}
+
+		if (game.gameRestart) {
+			game.restartGame();
 		}
 
 		if (!game.gameOver) requestAnimationFrame(animate);
 	}
 
-	startButton.addEventListener('click', function () {
-		startScreen.style.display = 'none';
-		animate(0);
-	});
+	if (!game.gameRestart) animate(0);
 });
