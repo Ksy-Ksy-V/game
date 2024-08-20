@@ -35,6 +35,7 @@ window.addEventListener('load', function () {
 			this.time = 0;
 			this.maxTime = 30000;
 			this.gameOver = false;
+			this.gamePause = false;
 			this.hearts = 5;
 			this.player.currentState = this.player.states[0];
 			this.player.currentState.enter();
@@ -114,11 +115,14 @@ window.addEventListener('load', function () {
 
 	function animate(timeStamp) {
 		const deltaTime = timeStamp - lastTime;
-
 		lastTime = timeStamp;
-		ctx.clearRect(0, 0, canvas.width, canvas.height);
-		game.update(deltaTime);
-		game.draw(ctx);
+
+		if (!game.isPaused) {
+			ctx.clearRect(0, 0, canvas.width, canvas.height);
+			game.update(deltaTime);
+			game.draw(ctx);
+		}
+
 		if (!game.gameOver) requestAnimationFrame(animate);
 	}
 

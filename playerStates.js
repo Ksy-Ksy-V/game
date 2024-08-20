@@ -206,3 +206,20 @@ export class Hit extends State {
 		}
 	}
 }
+// export class Pause extends State {
+// 	constructor(game) {
+// 		super('Pause', game);
+// 	}
+// 	enter() {
+// 		this.game.player.frameX = 0;
+// 		this.game.player.maxFrame = 4;
+// 		this.game.player.frameY = 5;
+// 	}
+// 	handleInput(input) {
+// 		if (input.includes('Escape') || this.state === states.PAUSE) {
+// 			this.game.player.setState(states.PAUSE, 1);
+// 		} else {
+// 			this.game.player.setState(states.PAUSE, 0);
+// 		}
+// 	}
+// }
