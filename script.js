@@ -17,27 +17,33 @@ window.addEventListener('load', function () {
 			this.groundMargin = 50;
 			this.speed = 0;
 			this.maxSpeed = 3;
+
 			this.background = new Background(this);
 			this.player = new Player(this);
 			this.input = new InputHandler(this);
 			this.UI = new UI(this);
+
 			this.enemies = [];
 			this.particles = [];
 			this.collisions = [];
 			this.floatingMessages = [];
+
 			this.maxParticles = 50;
 			this.enemyTimer = 0;
 			this.enemyInterval = 1000;
+
 			this.debug = false;
 			this.score = 0;
 			this.winningScore = 40;
 			this.fontColor = 'black';
 			this.time = 0;
 			this.maxTime = 30000;
+
 			this.gameOver = false;
 			this.gamePause = false;
 			this.gameRestart = false;
 			this.hearts = 5;
+
 			this.player.currentState = this.player.states[0];
 			this.player.currentState.enter();
 		}
@@ -120,9 +126,7 @@ window.addEventListener('load', function () {
 			this.particles = [];
 			this.collisions = [];
 			this.floatingMessages = [];
-			this.maxParticles = 50;
 			this.enemyTimer = 0;
-			this.enemyInterval = 1000;
 			this.score = 0;
 			this.time = 0;
 			this.gameOver = false;
@@ -150,14 +154,16 @@ window.addEventListener('load', function () {
 		}
 
 		if (game.gamePause) {
-			pauseScreen.style.display = 'block';
+			pauseScreen.style.display = 'flex';
 		}
 
 		if (game.gameRestart) {
 			game.restartGame();
 		}
 
-		if (!game.gameOver) requestAnimationFrame(animate);
+		if (!game.gameOver) {
+			requestAnimationFrame(animate);
+		}
 	}
 
 	if (!game.gameRestart) animate(0);

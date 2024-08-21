@@ -2,14 +2,15 @@ export class InputHandler {
 	constructor(game) {
 		this.game = game;
 		this.keys = [];
-
 		window.addEventListener('keydown', (e) => {
+			console.log(e.key, 'keydown');
+
 			if (
 				(e.key === 'ArrowDown' ||
 					e.key === 'ArrowUp' ||
 					e.key === 'ArrowLeft' ||
 					e.key === 'ArrowRight' ||
-					e.key === 'Control') &&
+					e.key === ' ') &&
 				this.keys.indexOf(e.key) === -1
 			) {
 				this.keys.push(e.key);
@@ -19,16 +20,22 @@ export class InputHandler {
 				this.game.gamePause = !this.game.gamePause;
 			} else if (e.key === 'Backspace') {
 				this.game.gameRestart = !this.game.gameRestart;
+				if (this.game.gameOver) {
+					this.game.gameOver = !this.game.gameOver;
+					this.game.restartGame();
+				}
 			}
 		});
 
 		window.addEventListener('keyup', (e) => {
+			console.log(e.key, 'keyup');
+
 			if (
 				e.key === 'ArrowDown' ||
 				e.key === 'ArrowUp' ||
 				e.key === 'ArrowLeft' ||
 				e.key === 'ArrowRight' ||
-				e.key === 'Control'
+				e.key === ' '
 			) {
 				this.keys.splice(this.keys.indexOf(e.key), 1);
 			}

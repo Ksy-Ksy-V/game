@@ -28,45 +28,31 @@ export class UI {
 			context.drawImage(this.heartImage, 30 * i + 20, 95, 25, 25);
 		}
 
-		//game paused
-		// if (this.game.isPaused) {
-		// 	context.textAlign = 'center';
-		// 	context.font = this.fontSize * 1.5 + 'px ' + this.fontFamily;
-		// 	context.fillText(
-		// 		'Paused',
-		// 		this.game.width * 0.5,
-		// 		this.game.height * 0.5
-		// 	);
-		// }
 		//game over
 		if (this.game.gameOver) {
+			const gameOverScreen = document.getElementById('gameOverScreen');
+			const gameOverTitle = document.getElementById('gameOverTitle');
+			const gameOverMessage = document.getElementById('gameOverMessage');
+
 			context.textAlign = 'center';
 			context.font = this.fontSize * 1.5 + 'px ' + this.fontFamily;
+
 			if (this.game.score > this.game.winningScore) {
-				context.fillText(
-					'What do we like?',
-					+this.game.width * 0.5,
-					this.game.height * 0.5 - 20
-				);
-				context.font = this.fontSize * 0.7 + 'px ' + this.fontFamily;
-				context.fillText(
-					'What we love ! ! !',
-					+this.game.width * 0.5,
-					this.game.height * 0.5 + 20
-				);
+				gameOverTitle.textContent = 'You win  ! ! !';
+				gameOverMessage.textContent = 'Congratulations!';
 			} else {
-				context.fillText(
-					'What do we like?',
-					+this.game.width * 0.5,
-					this.game.height * 0.5 - 20
-				);
-				context.font = this.fontSize * 0.7 + 'px ' + this.fontFamily;
-				context.fillText(
-					'Trying again! ! !',
-					+this.game.width * 0.5,
-					this.game.height * 0.5 + 20
-				);
+				gameOverTitle.textContent = 'This is lose . . .';
+				gameOverMessage.textContent = "Don't Give Up!";
 			}
+			gameOverScreen.classList.remove('hidden');
+
+			document
+				.getElementById('restartButton')
+				.addEventListener('click', function () {
+					game.gameRestart = true;
+					gameOverScreen.classList.add('hidden');
+					animate(0);
+				});
 		}
 
 		context.restore();

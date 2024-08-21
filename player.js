@@ -81,12 +81,6 @@ export class Player {
 		}
 	}
 
-	// restart() {
-	// 	this.x = 100;
-	// 	this.y = this.gameHeight - this.height;
-	// 	this.maxFrame = 8;
-	// 	this.frameY = 0;
-	// }
 	draw(context) {
 		if (this.game.debug)
 			context.strokeRect(this.x, this.y, this.width, this.height);

@@ -31,8 +31,25 @@
 		<link rel="stylesheet" href="style.css" />
 	</head>
 	<body>
+		<!-- <div id="pauseScreen">
+			<h1>Game on pause...</h1>
+			<p>Press for:</p>
+			<div class="controls-key-container">
+				<ul class="key-controls">
+					<li>
+						<div class="key-pause">Backspace</div>
+						Restart
+					</li>
+					<li>
+						<div class="key-pause">Escape</div>
+						Continue
+					</li>
+				</ul>
+			</div>
+		</div> -->
+
 		<div id="pauseScreen">
-			<h1>Welcome to the Game!</h1>
+			<h1>Need a minute?</h1>
 			<p>Use the following controls to play:</p>
 			<div class="controls-container">
 				<div class="move-controls">
@@ -46,16 +63,23 @@
 				</div>
 				<div class="action-controls">
 					<li>
-						<div class="key space-key">Ctrl</div>
+						<div class="key space-key">Space</div>
 						Attack
 					</li>
 					<li>
-						<div class="key space-key">Space</div>
+						<div class="key space-key">Escape</div>
 						Pause
 					</li>
 				</div>
 			</div>
 		</div>
+
+		<div id="gameOverScreen" class="hidden">
+			<h1 id="gameOverTitle"></h1>
+			<p id="gameOverMessage"></p>
+			<button id="restartButton">Restart Game</button>
+		</div>
+
 		<canvas id="canvas1"></canvas>
 
 		<img id="player" src="player.png" />
