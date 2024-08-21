@@ -2,6 +2,7 @@ import { Player } from './player.js';
 import { InputHandler } from './input.js';
 import { Background } from './background.js';
 import { FlyingEnemy, GroundEnemy, ClimbingEnemy } from './enemies.js';
+import { FlyingFriend } from './friends.js';
 import { UI } from './UI.js';
 
 window.addEventListener('load', function () {
@@ -24,6 +25,7 @@ window.addEventListener('load', function () {
 			this.UI = new UI(this);
 
 			this.enemies = [];
+			this.friends = [];
 			this.particles = [];
 			this.collisions = [];
 			this.floatingMessages = [];
@@ -31,6 +33,9 @@ window.addEventListener('load', function () {
 			this.maxParticles = 50;
 			this.enemyTimer = 0;
 			this.enemyInterval = 1000;
+
+			this.friendTimer = 0;
+			this.friendInterval = 1000;
 
 			this.debug = false;
 			this.score = 0;
@@ -66,6 +71,16 @@ window.addEventListener('load', function () {
 			this.enemies.forEach((enemy) => {
 				enemy.update(deltaTime);
 			});
+			// handleFriends
+			if (this.friendTimer > this.friendInterval) {
+				this.addFriend();
+				this.friendTimer = 0;
+			} else {
+				this.friendTimer += deltaTime;
+			}
+			this.friends.forEach((friend) => {
+				friend.update(deltaTime);
+			});
 			// handle messages
 			this.floatingMessages.forEach((message) => {
 				message.update();
@@ -84,6 +99,9 @@ window.addEventListener('load', function () {
 			this.enemies = this.enemies.filter(
 				(enemy) => !enemy.markedForDeletion
 			);
+			this.friends = this.friends.filter(
+				(friend) => !friend.markedForDeletion
+			);
 			this.particles = this.particles.filter(
 				(particle) => !particle.markedForDeletion
 			);
@@ -100,6 +118,9 @@ window.addEventListener('load', function () {
 			this.player.draw(context);
 			this.enemies.forEach((enemy) => {
 				enemy.draw(context);
+			});
+			this.friends.forEach((friend) => {
+				friend.draw(context);
 			});
 			this.particles.forEach((particle) => {
 				particle.draw(context);
@@ -119,14 +140,21 @@ window.addEventListener('load', function () {
 			this.enemies.push(new FlyingEnemy(this));
 		}
 
+		addFriend() {
+			if (this.speed > 0 && Math.random() < 0.5)
+				this.friends.push(new FlyingFriend(this));
+		}
+
 		restartGame() {
 			this.groundMargin = 50;
 			this.speed = 0;
 			this.enemies = [];
+			this.friends = [];
 			this.particles = [];
 			this.collisions = [];
 			this.floatingMessages = [];
 			this.enemyTimer = 0;
+			this.friendTimer = 0;
 			this.score = 0;
 			this.time = 0;
 			this.gameOver = false;

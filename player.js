@@ -139,5 +139,44 @@ export class Player {
 				}
 			}
 		});
+		this.game.friends.forEach((friend) => {
+			if (
+				friend.x < this.x + this.width &&
+				friend.x + friend.width > this.x &&
+				friend.y < this.y + this.height &&
+				friend.y + friend.height > this.y
+			) {
+				friend.markedForDeletion = true;
+				this.game.collisions.push(
+					new CollisionAnimation(
+						this.game,
+						friend.x + friend.width * 0.5,
+						friend.y + friend.height * 0.5
+					)
+				);
+				if (
+					this.currentState === this.states[4] ||
+					this.currentState === this.states[5]
+				) {
+					this.game.score -= 5;
+					this.game.floatingMessages.push(
+						new FloatingMessages(
+							'ooops',
+							friend.x,
+							friend.y,
+							130,
+							50
+						)
+					);
+				} else {
+					this.game.score += 10;
+					// this.game.hearts--;
+					this.game.floatingMessages.push(
+						new FloatingMessages('+10', friend.x, friend.y, 130, 50)
+					);
+					if (this.game.hearts <= 0) this.game.gameOver = true;
+				}
+			}
+		});
 	}
 }

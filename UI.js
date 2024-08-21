@@ -1,7 +1,7 @@
 export class UI {
 	constructor(game) {
 		this.game = game;
-		this.fontSize = 30;
+		this.fontSize = 40;
 		this.fontFamily = 'Pixelify Sans';
 		this.heartImage = document.getElementById('heart');
 	}
