@@ -14,18 +14,53 @@ class Perticles {
 export class Dust extends Perticles {
 	constructor(game, x, y) {
 		super(game);
-		this.size = Math.random() * 10 + 10;
+		this.image = document.getElementById('fire');
+		this.size = Math.random() * 100 + 10;
 		this.x = x;
 		this.y = y;
 		this.speedX = Math.random();
 		this.speedY = Math.random();
-		this.color = 'rgba(0, 0, 0, 0.2)';
+		this.frameX = 0;
+		this.frameY = 0;
+		this.maxFrame = 6;
+		this.fps = 6;
+		this.frameInterval = 1000 / this.fps;
+		this.frameTimer = 0;
+		this.spriteWidth = 25;
+		this.spriteHeight = 25;
 	}
+
+	update(deltaTime) {
+		this.x -= this.speedX;
+		this.y -= this.speedY;
+
+		if (this.frameTimer > this.frameInterval) {
+			this.frameTimer = 0;
+			if (this.frameX < this.maxFrame) this.frameX++;
+			else this.frameX = 0;
+		} else {
+			this.frameTimer += deltaTime;
+		}
+
+		this.size *= 0.95;
+		if (this.size < 0.5) this.markedForDeletion = true;
+	}
+
 	draw(context) {
-		context.beginPath();
-		context.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-		context.fillStyle = this.color;
-		context.fill();
+		context.save();
+		context.translate(this.x, this.y);
+		context.drawImage(
+			this.image,
+			this.frameX * this.spriteWidth,
+			this.frameY * this.spriteHeight,
+			this.spriteWidth,
+			this.spriteHeight,
+			-this.size * 0.5,
+			-this.size * 0.5,
+			this.size,
+			this.size
+		);
+		context.restore();
 	}
 }
 
@@ -59,20 +94,35 @@ export class Fire extends Perticles {
 		this.y = y;
 		this.speedX = 1;
 		this.speedY = 1;
-		this.angle = 0;
-		this.va = Math.random() * 0.2 - 0.1;
+
+		this.frameX = 0;
+		this.frameY = 0;
+		this.maxFrame = 6;
+		this.fps = 7;
+		this.frameInterval = 500 / this.fps;
+		this.frameTimer = 0;
+		this.spriteWidth = 25;
+		this.spriteHeight = 25;
 	}
 	update() {
 		super.update();
-		this.angle += this.va;
-		this.x += Math.sin(this.angle * 5);
+
+		this.frameTimer++;
+		if (this.frameTimer > this.frameInterval / 16.67) {
+			this.frameTimer = 0;
+			if (this.frameX < this.maxFrame) this.frameX++;
+			else this.frameX = 0;
+		}
 	}
 	draw(context) {
 		context.save();
 		context.translate(this.x, this.y);
-		context.rotate(this.angle);
 		context.drawImage(
 			this.image,
+			this.frameX * this.spriteWidth,
+			0,
+			this.spriteWidth,
+			this.spriteHeight,
 			-this.size * 0.5,
 			-this.size * 0.5,
 			this.size,

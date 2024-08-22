@@ -15,7 +15,7 @@ window.addEventListener('load', function () {
 		constructor(width, height) {
 			this.width = width;
 			this.height = height;
-			this.groundMargin = 50;
+			this.groundMargin = 40;
 			this.speed = 0;
 			this.maxSpeed = 3;
 
@@ -115,6 +115,9 @@ window.addEventListener('load', function () {
 
 		draw(context) {
 			this.background.draw(context);
+			this.particles.forEach((particle) => {
+				particle.draw(context);
+			});
 			this.player.draw(context);
 			this.enemies.forEach((enemy) => {
 				enemy.draw(context);
@@ -122,9 +125,7 @@ window.addEventListener('load', function () {
 			this.friends.forEach((friend) => {
 				friend.draw(context);
 			});
-			this.particles.forEach((particle) => {
-				particle.draw(context);
-			});
+
 			this.collisions.forEach((collision) => {
 				collision.draw(context);
 			});

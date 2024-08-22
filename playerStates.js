@@ -52,8 +52,8 @@ export class Running extends State {
 		this.game.particles.unshift(
 			new Dust(
 				this.game,
-				this.game.player.x + this.game.player.width * 0.5,
-				this.game.player.y + this.game.player.height
+				this.game.player.x + this.game.player.width * 0.2,
+				this.game.player.y + this.game.player.height * 0.7
 			)
 		);
 		if (input.includes('ArrowDown')) {
@@ -192,7 +192,7 @@ export class Hit extends State {
 	enter() {
 		this.game.player.frameX = 0;
 		this.game.player.maxFrame = 10;
-		this.game.player.frameY = 4;
+		this.game.player.frameY = 5;
 	}
 
 	handleInput(input) {
