@@ -11,18 +11,19 @@ html {
 	overflow: hidden;
 	width: 100%;
 	height: 100%;
-	background-color: #f9cfe9;
+	background-color: #ffd8ef;
+	font-family: 'Pixelify Sans', 'Press Start 2P', cursive;
 }
 
 #canvas1 {
-	border: 5px solid 050f07;
 	display: block;
 	position: absolute;
 	top: 0;
 	left: 0;
 	width: 100%;
 	height: 100%;
-	font-family: 'Pixelify Sans', cursive;
+
+	image-rendering: pixelated;
 }
 
 #player,
@@ -34,30 +35,60 @@ html {
 #enemy_fly,
 #enemy_plant,
 #enemy_spider_big,
+#friend_fly,
+#friend_plant,
 #fire,
 #collisionAnimation,
 #heart {
 	display: none;
 }
 
-#startScreen {
+#startScreen,
+#pauseScreen,
+#gameOverScreen {
 	position: absolute;
 	top: 50%;
 	left: 50%;
 	width: 600px;
 	height: 400px;
 	background-color: #ffa3b1;
-	color: #990030;
+	color: #0c0b0b;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-	font-family: 'Pixelify Sans', cursive;
 	transform: translate(-50%, -50%);
-	border: 4px solid #ffd8ef;
+	border: 4px solid #990030;
+	box-shadow: 0px 0px 20px #ffa3b1;
 	z-index: 10;
-	box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5);
 	opacity: 0.9;
+}
+
+#startScreen h1,
+#pauseScreen h1,
+#gameOverScreen h1 {
+	font-size: 3em;
+	margin-bottom: 20px;
+	text-shadow: 2px 2px 0px #ffd8ef;
+}
+
+#startScreen button,
+#restartButton {
+	font-size: 24px;
+	padding: 10px 20px;
+	cursor: pointer;
+	background-color: #ffd8ef;
+	border: none;
+	color: #14000c;
+	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+	transition: background-color 0.3s ease;
+	font-family: 'Pixelify Sans', cursive;
+}
+
+#startScreen button:hover,
+#restartButton:hover {
+	background-color: #990030;
+	color: #ffd8ef;
 }
 
 .action-controls li {
@@ -93,14 +124,13 @@ html {
 .key {
 	width: 50px;
 	height: 50px;
-	background-color: #f5c4cc;
-	color: #14000c;
+	background-color: #ffd8ef;
+	color: #990030;
 	font-size: 18px;
 	font-weight: bold;
 	text-align: center;
 	line-height: 50px;
 	box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
-	border: 4px solid #ffd8ef;
 }
 
 .key:last-child {
@@ -120,90 +150,16 @@ html {
 	margin-bottom: 10px;
 }
 
-#startScreen button {
-	font-size: 24px;
-	padding: 10px 20px;
-	cursor: pointer;
-	background-color: #ffd8ef;
-	border: none;
-	color: #14000c;
-	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
-	transition: background-color 0.3s ease;
-	font-family: 'Pixelify Sans', cursive;
-}
-
-#startScreen button:hover {
+.key:hover {
 	background-color: #990030;
 	color: #ffd8ef;
-}
-
-#pauseScreen {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	width: 600px;
-	height: 400px;
-	background-color: #ffa3b1;
-	color: #990030;
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	font-family: 'Pixelify Sans', cursive;
-	transform: translate(-50%, -50%);
-	border: 4px solid #ffd8ef;
-	z-index: 10;
-	box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5);
-	opacity: 0.9;
-}
-
-#gameOverScreen {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	width: 600px;
-	height: 400px;
-	background-color: #ffa3b1;
-	color: #990030;
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	font-family: 'Pixelify Sans', cursive;
-	transform: translate(-50%, -50%);
-	border: 4px solid #ffd8ef;
-	z-index: 10;
-	box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5);
-	opacity: 0.9;
 }
 
 #gameOverScreen.hidden {
 	display: none;
 }
 
-#gameOverScreen h1 {
-	margin-bottom: 20px;
-	font-size: 2.5em;
-}
-
 #gameOverScreen p {
 	margin-bottom: 20px;
 	font-size: 1.5em;
-}
-
-#restartButton {
-	font-size: 24px;
-	padding: 10px 20px;
-	cursor: pointer;
-	background-color: #ffd8ef;
-	border: none;
-	color: #14000c;
-	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
-	transition: background-color 0.3s ease;
-	font-family: 'Pixelify Sans', cursive;
-}
-
-#restartButton:hover {
-	background-color: #990030;
-	color: #ffd8ef;
 }

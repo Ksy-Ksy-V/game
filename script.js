@@ -135,15 +135,20 @@ window.addEventListener('load', function () {
 			this.UI.draw(context);
 		}
 		addEnemy() {
-			if (this.speed > 0 && Math.random() < 0.5)
-				this.enemies.push(new GroundEnemy(this));
-			else if (this.speed > 0) this.enemies.push(new ClimbingEnemy(this));
-			this.enemies.push(new FlyingEnemy(this));
+			if (this.enemies.length < 2) {
+				if (this.speed > 0 && Math.random() < 0.5)
+					this.enemies.push(new GroundEnemy(this));
+				else if (this.speed > 0)
+					this.enemies.push(new ClimbingEnemy(this));
+				this.enemies.push(new FlyingEnemy(this));
+			}
 		}
 
 		addFriend() {
-			if (this.speed > 0 && Math.random() < 0.5)
-				this.friends.push(new FlyingFriend(this));
+			if (this.friends.length < 1) {
+				if (this.speed > 0 && Math.random() < 0.5)
+					this.friends.push(new FlyingFriend(this));
+			}
 		}
 
 		restartGame() {

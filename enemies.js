@@ -46,7 +46,9 @@ export class FlyingEnemy extends Enemy {
 		this.height = 58;
 		this.x = this.game.width + Math.random() * this.game.width * 0.5;
 		this.y = Math.random() * this.game.height * 0.5;
-		this.speedX = Math.random() + 1;
+		this.speedX = 0;
+
+		// this.speedX = Math.floor(Math.random() * 3);
 		this.speedY = 0;
 		this.maxFrame = 5;
 		this.image = document.getElementById('enemy_fly');
@@ -85,15 +87,17 @@ export class ClimbingEnemy extends Enemy {
 		this.y = Math.random() * this.game.height * 0.5;
 		this.image = document.getElementById('enemy_spider_big');
 		this.speedX = 0;
-		this.speedY = Math.random() > 0.5 ? 1 : -1;
+		this.speedY = Math.random() > 0.5 ? 0.5 : -0.5;
 		this.maxFrame = 5;
 	}
+
 	update(deltaTime) {
 		super.update(deltaTime);
 		if (this.y > this.game.height - this.height - this.game.groundMargin)
 			this.speedY *= -1;
 		if (this.y < -this.height) this.markedForDeletion = true;
 	}
+
 	draw(context) {
 		super.draw(context);
 		context.beginPath();

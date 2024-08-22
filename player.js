@@ -24,10 +24,10 @@ export class Player {
 		this.frameY = 0;
 		this.maxFrame;
 		this.fps = 15;
-		this.frameInterval = 1000 / this.fps;
+		this.frameInterval = 1500 / this.fps;
 		this.frameTimer = 0;
 		this.speed = 0;
-		this.maxSpeed = 10;
+		this.maxSpeed = 1;
 		this.states = [
 			new Sitting(this.game),
 			new Running(this.game),
@@ -71,6 +71,7 @@ export class Player {
 		// vertical boundaries
 		if (this.y > this.game.height - this.height - this.game.groundMargin)
 			this.y = this.game.height - this.height - this.game.groundMargin;
+
 		// sprite anumation
 		if (this.frameTimer > this.frameInterval) {
 			this.frameTimer = 0;
@@ -96,16 +97,19 @@ export class Player {
 			this.height
 		);
 	}
+
 	onGround() {
 		return (
 			this.y >= this.game.height - this.height - this.game.groundMargin
 		);
 	}
+
 	setState(state, speed) {
 		this.currentState = this.states[state];
 		this.game.speed = this.game.maxSpeed * speed;
 		this.currentState.enter();
 	}
+
 	checkCollision() {
 		this.game.enemies.forEach((enemy) => {
 			if (
@@ -170,7 +174,7 @@ export class Player {
 					);
 				} else {
 					this.game.score += 10;
-					// this.game.hearts--;
+
 					this.game.floatingMessages.push(
 						new FloatingMessages('+10', friend.x, friend.y, 130, 50)
 					);
