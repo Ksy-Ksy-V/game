@@ -11,7 +11,7 @@ html {
 	overflow: hidden;
 	width: 100%;
 	height: 100%;
-	background-color: #ffd8ef;
+	/* background-color: #ffd8ef; */
 	font-family: 'Pixelify Sans', 'Press Start 2P', cursive;
 }
 
@@ -59,9 +59,10 @@ html {
 	align-items: center;
 	transform: translate(-50%, -50%);
 	border: 4px solid #990030;
-	box-shadow: 0px 0px 20px #ffa3b1;
+	/* box-shadow: 0px 0px 20px #ffa3b1; */
 	z-index: 10;
 	opacity: 0.9;
+	/* display: none; */
 }
 
 #startScreen h1,
@@ -72,8 +73,10 @@ html {
 	text-shadow: 2px 2px 0px #ffd8ef;
 }
 
-#startScreen button,
-#restartButton {
+#startButton,
+#restartButton,
+#restartSecondButton,
+#continueButton {
 	font-size: 24px;
 	padding: 10px 20px;
 	cursor: pointer;
@@ -83,6 +86,7 @@ html {
 	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
 	transition: background-color 0.3s ease;
 	font-family: 'Pixelify Sans', cursive;
+	margin: 1rem;
 }
 
 #startScreen button:hover,

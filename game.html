@@ -1,75 +1,100 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Game for cat</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet" />
-    <link rel="apple-touch-icon" sizes="180x180" href="img/favicon/apple-touch-icon.png" />
-    <link rel="icon" type="image/png" sizes="32x32" href="img/favicon/favicon-32x32.png" />
-    <link rel="icon" type="image/png" sizes="16x16" href="img/favicon/favicon-16x16.png" />
-    <link rel="manifest" href="img/favicon/site.webmanifest" />
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Game for cat</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap"
+			rel="stylesheet"
+		/>
+		<link
+			rel="apple-touch-icon"
+			sizes="180x180"
+			href="img/favicon/apple-touch-icon.png"
+		/>
+		<link
+			rel="icon"
+			type="image/png"
+			sizes="32x32"
+			href="img/favicon/favicon-32x32.png"
+		/>
+		<link
+			rel="icon"
+			type="image/png"
+			sizes="16x16"
+			href="img/favicon/favicon-16x16.png"
+		/>
+		<link rel="manifest" href="img/favicon/site.webmanifest" />
 
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <div id="pauseScreen">
-      <h1>Need a minute?</h1>
-      <p>Use the following controls to play:</p>
-      <div class="controls-container">
-        <div class="move-controls">
-          <div class="key">↑</div>
-          <div class="horizontal-keys">
-            <div class="key">←</div>
-            <div class="key">↓</div>
-            <div class="key">→</div>
+		<link rel="stylesheet" href="style.css" />
+	</head>
+	<body>
+
+    <body>
+      <div id="startScreen">
+        <h1>Welcome to the Game!</h1>
+        <p>Use the following controls to play:</p>
+        <div class="controls-container">
+          <div class="move-controls">
+            <div class="key">↑</div>
+            <div class="horizontal-keys">
+              <div class="key">←</div>
+              <div class="key">↓</div>
+              <div class="key">→</div>
+            </div>
+            <div>Moves</div>
           </div>
-          <div>Moves</div>
+          <div class="action-controls">
+            <li>
+              <div class="key space-key">Space</div>
+              Attack
+            </li>
+            <li>
+              <div class="key space-key">Escape</div>
+              Pause
+            </li>
+          </div>
         </div>
-        <div class="action-controls">
-          <li>
-            <div class="key space-key">Space</div>
-            Attack
-          </li>
-          <li>
-            <div class="key space-key">Escape</div>
-            Pause
-          </li>
-        </div>
+        <button id="startButton">Start!</button>
       </div>
-    </div>
 
-    <div id="gameOverScreen">
-      <h1 id="gameOverTitle"></h1>
-      <p id="gameOverMessage"></p>
-      <button id="restartButton">Restart Game</button>
-    </div>
+		<!-- <div id="pauseScreen">
+			<h1>Need a minute?</h1> 
+      <button id="continueButton">Continue  Game</button>
+		</div> -->
 
-    <canvas id="canvas1"></canvas>
+		<!-- <div id="gameOverScreen">
+			<h1 id="gameOverTitle"></h1>
+			<p id="gameOverMessage"></p>
+			<button id="restartButton">Restart Game</button>
+		</div> -->
 
-    <img id="player" src="img/player/player.png" />
+		<canvas id="canvas1"></canvas>
 
-    <img id="layer1" src="img/layers/layer-1.png" />
-    <img id="layer2" src="img/layers/layer-2.png" />
-    <img id="layer3" src="img/layers/layer-3.png" />
-    <img id="layer4" src="img/layers/layer-4.png" />
-    <img id="layer5" src="img/layers/layer-5.png" />
+		<img id="player" src="img/player/player.png" />
 
-    <img id="enemy_fly" src="img/enemies/enemy_fly.png" />
-    <img id="enemy_plant" src="img/enemies/enemy_plant.png" />
-    <img id="enemy_spider_big" src="img/enemies/enemy_spider_big.png" />
+		<img id="layer1" src="img/layers/layer-1.png" />
+		<img id="layer2" src="img/layers/layer-2.png" />
+		<img id="layer3" src="img/layers/layer-3.png" />
+		<img id="layer4" src="img/layers/layer-4.png" />
+		<img id="layer5" src="img/layers/layer-5.png" />
 
-    <img id="friend_fly" src="img/friends/friend_fly.png" />
-    <img id="friend_plant" src="img/friends/friend_plant.png" />
+		<img id="enemy_fly" src="img/enemies/enemy_fly.png" />
+		<img id="enemy_plant" src="img/enemies/enemy_plant.png" />
+		<img id="enemy_spider_big" src="img/enemies/enemy_spider_big.png" />
 
-    <img id="fire" src="img/effects/fire.png" />
+		<img id="friend_fly" src="img/friends/friend_fly.png" />
+		<img id="friend_plant" src="img/friends/friend_plant.png" />
 
-    <img id="heart" src="img/player/heart.png" />
+		<img id="fire" src="img/effects/fire.png" />
 
-    <img id="collisionAnimation" src="img/effects/boom.png" />
+		<img id="heart" src="img/player/heart.png" />
 
-    <script type="module" src="src/js/game.js"></script>
-  </body>
+		<img id="collisionAnimation" src="img/effects/boom.png" />
+
+		<script type="module" src="src/js/game.js"></script>
+	</body>
 </html>
