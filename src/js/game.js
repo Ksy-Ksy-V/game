@@ -100,12 +100,10 @@ class GameController {
   }
 
   pauseGame() {
-    if (this.game) {
-      this.game.gamePause = !this.game.gamePause;
-      if (!this.game.gamePause) {
-        this.lastTime = performance.now();
-        this.animate(this.lastTime);
-      }
+    this.game.gamePause = !this.game.gamePause;
+    if (!this.game.gamePause) {
+      this.stopAnimation();
+      this.animate(this.lastTime);
     }
   }
 
@@ -133,9 +131,9 @@ class GameController {
 
   animate(timeStamp) {
     const deltaTime = timeStamp - this.lastTime;
+    this.lastTime = timeStamp;
 
     if (!this.game.gamePause) {
-      this.lastTime = timeStamp;
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
       this.game.update(deltaTime);
       this.game.draw(this.ctx);
