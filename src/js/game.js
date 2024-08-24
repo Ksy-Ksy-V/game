@@ -2,7 +2,7 @@ import { Player } from './player.js';
 import { InputHandler } from './input.js';
 import { Background } from './background.js';
 import { FlyingEnemy, GroundEnemy, ClimbingEnemy } from './enemies.js';
-import { FlyingFriend } from './friends.js';
+import { FlyingFriend, GroundFriend } from './friends.js';
 import { UI } from './UI.js';
 
 class GameController {
@@ -67,6 +67,14 @@ class GameController {
 	showStartScreen() {
 		this.startScreen.style.display = 'flex';
 		this.canvas.style.display = 'none';
+
+		const controller = this;
+
+		document
+			.getElementById('startButton')
+			.addEventListener('click', function () {
+				controller.startGame();
+			});
 	}
 
 	startGame() {
@@ -104,12 +112,12 @@ class GameController {
 	addEventListeners() {
 		const controller = this;
 
-		document
-			.getElementById('startButton')
-			.addEventListener('click', function () {
-				controller.startGame();
-				// controller.restartGame();
-			});
+		// document
+		// 	.getElementById('startButton')
+		// 	.addEventListener('click', function () {
+		// 		controller.startGame();
+		// 		// controller.restartGame();
+		// 	});
 
 		this.pauseScreen
 			.querySelector('#continueButton')
@@ -161,10 +169,12 @@ window.addEventListener('load', function () {
 	canvas.width = 1000;
 	canvas.height = 500;
 
-	const controller = new GameController(canvas);
-	controller.game = new Game(canvas.width, canvas.height);
-	controller.game.gamePause = true;
-	controller.showStartScreen();
+	new GameController(canvas);
+
+	// const controller = new GameController(canvas);
+	// controller.game = new Game(canvas.width, canvas.height);
+	// controller.game.gamePause = true;
+	// controller.showStartScreen();
 });
 
 class Game {
@@ -200,7 +210,7 @@ class Game {
 		this.winningScore = 40;
 		this.fontColor = 'black';
 		this.time = 0;
-		this.maxTime = 5000;
+		this.maxTime = 30000;
 		this.gameOver = false;
 		this.hearts = 5;
 
@@ -284,6 +294,12 @@ class Game {
 		if (this.friends.length < 1) {
 			if (this.speed > 0 && Math.random() < 0.5)
 				this.friends.push(new FlyingFriend(this));
+		}
+
+		if (this.friends.length < 1) {
+			if (this.speed > 0 && Math.random() < 0.5)
+				this.friends.push(new FlyingFriend(this));
+			else if (this.speed > 0) this.friends.push(new GroundFriend(this));
 		}
 	}
 }

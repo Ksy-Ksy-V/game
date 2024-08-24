@@ -59,3 +59,18 @@ export class FlyingFriend extends Friend {
 		this.y += Math.sin(this.angle);
 	}
 }
+
+export class GroundFriend extends Friend {
+	constructor(game) {
+		super();
+		this.game = game;
+		this.width = 44;
+		this.height = 42;
+		this.x = this.game.width;
+		this.y = this.game.height - this.height - this.game.groundMargin;
+		this.image = document.getElementById('friend_plant');
+		this.speedX = 0;
+		this.speedY = 0;
+		this.maxFrame = 5;
+	}
+}
