@@ -1,4 +1,4 @@
-class Friend {
+class HeartFriend {
 	constructor() {
 		this.frameX = 0;
 		this.frameY = 0;
@@ -38,39 +38,17 @@ class Friend {
 	}
 }
 
-export class FlyingFriend extends Friend {
+export class GroundFriend extends HeartFriend {
 	constructor(game) {
 		super();
 		this.game = game;
 		this.width = 44;
-		this.height = 48;
-		this.x = this.game.width + Math.random() * this.game.width * 0.5;
-		this.y = Math.random() * this.game.height * 0.5;
+		this.height = 42;
+		this.x = this.game.width;
+		this.y = this.game.height - this.height - this.game.groundMargin;
+		this.image = document.getElementById('friend_plant');
 		this.speedX = Math.random() + 1;
 		this.speedY = 0;
 		this.maxFrame = 5;
-		this.image = document.getElementById('friend_fly');
-		this.angle = 0;
-		this.va = Math.random() * 0.1 + 0.1;
-	}
-	update(deltaTime) {
-		super.update(deltaTime);
-		this.angle += this.va;
-		this.y += Math.sin(this.angle);
 	}
 }
-
-// export class GroundFriend extends Friend {
-// 	constructor(game) {
-// 		super();
-// 		this.game = game;
-// 		this.width = 44;
-// 		this.height = 42;
-// 		this.x = this.game.width;
-// 		this.y = this.game.height - this.height - this.game.groundMargin;
-// 		this.image = document.getElementById('friend_plant');
-// 		this.speedX = Math.random() + 1;
-// 		this.speedY = 0;
-// 		this.maxFrame = 5;
-// 	}
-// }

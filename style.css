@@ -11,7 +11,9 @@ html {
 	overflow: hidden;
 	width: 100%;
 	height: 100%;
-	/* background-color: #ffd8ef; */
+	background-image: url('./img/player/background.png');
+	background-size: cover;
+	background-position: center;
 	font-family: 'Pixelify Sans', 'Press Start 2P', cursive;
 }
 
@@ -51,25 +53,23 @@ html {
 	left: 50%;
 	width: 600px;
 	height: 400px;
-	background-color: #ad7299;
-	color: #452436;
+	background-color: #fac0e2;
+	color: #990030;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
 	transform: translate(-50%, -50%);
-	border: 4px solid #452436;
-	/* box-shadow: 0px 0px 20px #ffa3b1; */
+	border: 4px solid #990030;
 	z-index: 10;
 	opacity: 0.9;
-	/* display: none; */
 }
 
 #startScreen h1,
 #pauseScreen h1,
 #gameOverScreen h1 {
 	font-size: 3em;
-	margin-bottom: 20px;
+	margin-top: 20px;
 	text-shadow: 2px 2px 0px #ffd8ef;
 }
 
@@ -82,7 +82,7 @@ html {
 	cursor: pointer;
 	background-color: #ffd8ef;
 	border: none;
-	color: #14000c;
+	color: #990030;
 	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
 	transition: background-color 0.3s ease;
 	font-family: 'Pixelify Sans', cursive;
@@ -91,7 +91,7 @@ html {
 
 #startScreen button:hover,
 #restartButton:hover {
-	background-color: #452436;
+	background-color: #990030;
 	color: #ffd8ef;
 }
 
@@ -155,7 +155,7 @@ html {
 }
 
 .key:hover {
-	background-color: #452436;
+	background-color: #990030;
 	color: #ffd8ef;
 }
 
