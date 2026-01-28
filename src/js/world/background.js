@@ -1,3 +1,5 @@
+import { CONFIG } from '../config/config.js';
+
 class Layer {
   constructor(game, width, height, speedModifier, image) {
     this.game = game;
@@ -21,8 +23,9 @@ class Layer {
 export class Background {
   constructor(game) {
     this.game = game;
-    this.width = 1667;
-    this.height = 500;
+    const bg = CONFIG.background;
+    this.width = bg.width;
+    this.height = bg.height;
     this.layer1image = document.getElementById('layer1');
     this.layer2image = document.getElementById('layer2');
     this.layer3image = document.getElementById('layer3');

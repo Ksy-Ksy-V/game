@@ -4,9 +4,9 @@ export class CollisionAnimation {
     this.image = document.getElementById('collisionAnimation');
     this.spriteWidth = 90;
     this.spriteHeight = 90;
-    this.sizeMosifier = Math.random() + 0.5;
-    this.width = this.spriteWidth * this.sizeMosifier;
-    this.height = this.spriteHeight * this.sizeMosifier;
+    this.sizeModifier = Math.random() + 0.5;
+    this.width = this.spriteWidth * this.sizeModifier;
+    this.height = this.spriteHeight * this.sizeModifier;
     this.x = x - this.width * 0.5;
     this.y = y - this.height * 0.5;
     this.frameX = 0;
