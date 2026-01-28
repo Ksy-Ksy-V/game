@@ -1,9 +1,10 @@
-class Perticles {
+class Particles {
   constructor(game) {
     this.game = game;
     this.markedForDeletion = false;
   }
-  update() {
+  update(deltaTime) {
+    // Base class accepts deltaTime for consistency but does not use it
     this.x -= this.speedX + this.game.speed;
     this.y -= this.speedY;
     this.size *= 0.97;
@@ -11,7 +12,7 @@ class Perticles {
   }
 }
 
-export class Dust extends Perticles {
+export class Dust extends Particles {
   constructor(game, x, y) {
     super(game);
     this.image = document.getElementById('fire');
@@ -64,7 +65,7 @@ export class Dust extends Perticles {
   }
 }
 
-export class Splash extends Perticles {
+export class Splash extends Particles {
   constructor(game, x, y) {
     super(game);
     this.size = Math.random() * 100 + 50;
@@ -75,9 +76,10 @@ export class Splash extends Perticles {
     this.gravity = 0;
     this.image = document.getElementById('fire');
   }
-  update() {
-    super.update();
-    this.gravity += 0.1;
+  update(deltaTime) {
+    super.update(deltaTime);
+    const gravityAcceleration = 0.1 * (deltaTime / 16.67); // Normalize to 60 FPS
+    this.gravity += gravityAcceleration;
     this.y += this.gravity;
   }
   draw(context) {
@@ -85,7 +87,7 @@ export class Splash extends Perticles {
   }
 }
 
-export class Fire extends Perticles {
+export class Fire extends Particles {
   constructor(game, x, y) {
     super(game);
     this.image = document.getElementById('fire');
@@ -104,14 +106,15 @@ export class Fire extends Perticles {
     this.spriteWidth = 25;
     this.spriteHeight = 25;
   }
-  update() {
-    super.update();
+  update(deltaTime) {
+    super.update(deltaTime);
 
-    this.frameTimer++;
-    if (this.frameTimer > this.frameInterval / 16.67) {
+    if (this.frameTimer > this.frameInterval) {
       this.frameTimer = 0;
       if (this.frameX < this.maxFrame) this.frameX++;
       else this.frameX = 0;
+    } else {
+      this.frameTimer += deltaTime;
     }
   }
   draw(context) {

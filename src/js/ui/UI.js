@@ -4,6 +4,10 @@ export class UI {
 		this.fontSize = 40;
 		this.fontFamily = 'Pixelify Sans';
 		this.heartImage = document.getElementById('heart');
+		// Cache DOM element references for game over screen
+		this.gameOverScreen = document.getElementById('gameOverScreen');
+		this.gameOverTitle = document.getElementById('gameOverTitle');
+		this.gameOverMessage = document.getElementById('gameOverMessage');
 	}
 	draw(context) {
 		context.save();
@@ -33,19 +37,15 @@ export class UI {
 
 		//game over
 		if (this.game.gameOver) {
-			const gameOverScreen = document.getElementById('gameOverScreen');
-			const gameOverTitle = document.getElementById('gameOverTitle');
-			const gameOverMessage = document.getElementById('gameOverMessage');
-
 			context.textAlign = 'center';
 			context.font = this.fontSize * 1.5 + 'px ' + this.fontFamily;
 
 			if (this.game.score > this.game.winningScore) {
-				gameOverTitle.textContent = 'You win  ! ! !';
-				gameOverMessage.textContent = 'Congratulations!';
+				this.gameOverTitle.textContent = 'You win  ! ! !';
+				this.gameOverMessage.textContent = 'Congratulations!';
 			} else {
-				gameOverTitle.textContent = 'This is lose . . .';
-				gameOverMessage.textContent = "Don't Give Up!";
+				this.gameOverTitle.textContent = 'This is lose . . .';
+				this.gameOverMessage.textContent = "Don't Give Up!";
 			}
 		}
 
