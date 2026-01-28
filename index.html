@@ -1,76 +1,138 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Game for cat</title>
-		<link rel="preconnect" href="https://fonts.googleapis.com" />
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-		<link
-			href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap"
-			rel="stylesheet"
-		/>
-		<link
-			rel="apple-touch-icon"
-			sizes="180x180"
-			href="img/favicon/apple-touch-icon.png"
-		/>
-		<link
-			rel="icon"
-			type="image/png"
-			sizes="32x32"
-			href="img/favicon/favicon-32x32.png"
-		/>
-		<link
-			rel="icon"
-			type="image/png"
-			sizes="16x16"
-			href="img/favicon/favicon-16x16.png"
-		/>
-		<link rel="manifest" href="img/favicon/site.webmanifest" />
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Game for cat</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
+    <link rel="apple-touch-icon" sizes="180x180" href="img/favicon/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="img/favicon/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="img/favicon/favicon-16x16.png" />
+    <link rel="manifest" href="img/favicon/site.webmanifest" />
 
-		<link rel="stylesheet" href="style.css" />
-	</head>
-	<body>
-		<div id="mainMenu">
-			<h1>Choose a game</h1>
-			<div class="game-list">
-				<button id="playCatGame" class="game-button">Cat Game</button>
-			</div>
-		</div>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body class="retro-body">
+    <div class="sky-bg">
+      <div class="cloud-sprite cloud-sprite-1 cloud-1" aria-hidden="true"></div>
+      <div class="cloud-sprite cloud-sprite-2 cloud-2" aria-hidden="true"></div>
+      <div class="cloud-sprite cloud-sprite-3 cloud-3" aria-hidden="true"></div>
+      <div class="cloud-sprite cloud-sprite-4 cloud-4" aria-hidden="true"></div>
+      <div class="cloud-sprite cloud-sprite-1 cloud-5" aria-hidden="true"></div>
+      <div class="cloud-sprite cloud-sprite-2 cloud-6" aria-hidden="true"></div>
+      <div class="cloud-sprite cloud-sprite-3 cloud-7" aria-hidden="true"></div>
+      <div class="cloud-sprite cloud-sprite-4 cloud-8" aria-hidden="true"></div>
+    </div>
+    <div id="mainMenu" class="pixel-panel pixel-panel-main">
+      <h1 class="pixel-title">PIXEL PLAY</h1>
+      <p class="pixel-subtitle">&gt; RETRO GAME PLATFORM &lt;</p>
+      <div class="game-list">
+        <button id="playCatGame" class="pixel-btn pixel-btn-play">PLAY</button>
+      </div>
+    </div>
 
-		<div id="startScreen" style="display: none;">
-			<h1 id="startScreenTitle">Cat Game</h1>
-			<p class="level-select-label">Test: choose level</p>
-			<div id="levelSelect" class="level-select-buttons"></div>
-			<p id="startScreenRules" class="level-rules"></p>
-			<p id="startScreenHint" class="level-hint" style="display: none;"></p>
-			<button id="startButton">Start Level 1</button>
-		</div>
+    <div id="startScreen" class="pixel-panel pixel-panel-choose" style="display: none">
+      <h1 id="startScreenTitle" class="pixel-panel-title">CHOOSE GAME</h1>
+      <div class="user-type-switcher">
+        <button type="button" class="user-type-btn active" data-type="new" id="btnUserNew">New user</button>
+        <button type="button" class="user-type-btn" data-type="played" id="btnUserPlayed">Already played</button>
+      </div>
+      <p id="startScreenRules" class="level-rules"></p>
+      <p id="startScreenHint" class="level-hint" style="display: none"></p>
+      <div class="level-controls">
+        <span class="controls-label">CONTROLS</span>
+        <div class="key-row">
+          <span class="pixel-key key-arrow" title="Move left">
+            <svg
+              class="pixel-arrow"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="square"
+              aria-hidden="true"
+            >
+              <polygon points="18,4 18,20 6,12" fill="currentColor" stroke="none" />
+            </svg>
+          </span>
+          <span class="pixel-key key-arrow" title="Move right">
+            <svg
+              class="pixel-arrow"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="square"
+              aria-hidden="true"
+            >
+              <polygon points="6,4 6,20 18,12" fill="currentColor" stroke="none" />
+            </svg>
+          </span>
+          <span class="key-gap"></span>
+          <span class="pixel-key key-arrow" title="Jump">
+            <svg
+              class="pixel-arrow"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="square"
+              aria-hidden="true"
+            >
+              <polygon points="12,4 4,20 20,20" fill="currentColor" stroke="none" />
+            </svg>
+          </span>
+          <span class="pixel-key key-arrow" title="Crouch / Dive">
+            <svg
+              class="pixel-arrow"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="square"
+              aria-hidden="true"
+            >
+              <polygon points="12,20 4,4 20,4" fill="currentColor" stroke="none" />
+            </svg>
+          </span>
+          <span class="key-gap"></span>
+          <span class="pixel-key key-space" title="Attack (roll)">SPACE</span>
+        </div>
+      </div>
+      <div id="startButtonWrap" class="start-actions">
+        <button id="startButton" class="pixel-btn pixel-btn-start">START LEVEL 1</button>
+      </div>
+      <div id="alreadyPlayedActions" class="start-actions" style="display: none">
+        <button type="button" id="btnPlayForTime" class="pixel-btn pixel-btn-start">Play for time</button>
+        <button type="button" id="btnPlayForPoints" class="pixel-btn pixel-btn-start">Play for points</button>
+      </div>
+    </div>
 
-		<canvas id="canvas1"></canvas>
+    <canvas id="canvas1"></canvas>
 
-		<img id="player" src="img/player/player.png" />
+    <img id="player" src="img/player/player.png" />
 
-		<img id="layer1" src="img/layers/layer-1.png" />
-		<img id="layer2" src="img/layers/layer-2.png" />
-		<img id="layer3" src="img/layers/layer-3.png" />
-		<img id="layer4" src="img/layers/layer-4.png" />
-		<img id="layer5" src="img/layers/layer-5.png" />
+    <img id="layer1" src="img/layers/layer-1.png" />
+    <img id="layer2" src="img/layers/layer-2.png" />
+    <img id="layer3" src="img/layers/layer-3.png" />
+    <img id="layer4" src="img/layers/layer-4.png" />
+    <img id="layer5" src="img/layers/layer-5.png" />
 
-		<img id="enemy_fly" src="img/enemies/enemy_fly.png" />
-		<img id="enemy_plant" src="img/enemies/enemy_plant.png" />
-		<img id="enemy_spider_big" src="img/enemies/enemy_spider_big.png" />
+    <img id="enemy_fly" src="img/enemies/enemy_fly.png" />
+    <img id="enemy_plant" src="img/enemies/enemy_plant.png" />
+    <img id="enemy_spider_big" src="img/enemies/enemy_spider_big.png" />
 
-		<img id="friend_fly" src="img/friends/friend_fly.png" />
-		<img id="friend_plant" src="img/friends/friend_plant.png" />
+    <img id="friend_fly" src="img/friends/friend_fly.png" />
+    <img id="friend_plant" src="img/friends/friend_plant.png" />
 
-		<img id="fire" src="img/effects/fire.png" />
+    <img id="fire" src="img/effects/fire.png" />
 
-		<img id="heart" src="img/player/heart.png" />
+    <img id="heart" src="img/player/heart.png" />
 
-		<img id="collisionAnimation" src="img/effects/boom.png" />
+    <img id="collisionAnimation" src="img/effects/boom.png" />
 
-		<script type="module" src="src/js/main.js"></script>
-	</body>
+    <script type="module" src="src/js/main.js"></script>
+  </body>
 </html>
