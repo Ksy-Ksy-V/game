@@ -8,14 +8,15 @@ export class FloatingMessages {
         this.markedForDeletion = false;
         this.timer = 0;
     }
-    update(){
-        this.x += (this.targetX - this.x) * 0.03;
-        this.y += (this.targetY - this.y) * 0.03;
-        this.timer++;
-        if (this.timer > 100) this.markedForDeletion = true;
+    update(deltaTime){
+        const lerpSpeed = 0.03 * (deltaTime / 16.67); // Normalize to 60 FPS
+        this.x += (this.targetX - this.x) * lerpSpeed;
+        this.y += (this.targetY - this.y) * lerpSpeed;
+        this.timer += deltaTime;
+        if (this.timer > 100 * 16.67) this.markedForDeletion = true; // ~100 frames at 60 FPS
     }
     draw(context){
-        context.font = "20 px Pixelify Sans";
+        context.font = "20px Pixelify Sans";
         context.fillStyle = "white";
         context.fillText(this.value, this.x, this.y);
         context.fillStyle = "black";

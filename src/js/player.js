@@ -1,4 +1,6 @@
+import { CONFIG } from './config.js';
 import {
+	states,
 	Sitting,
 	Running,
 	Jumping,
@@ -10,24 +12,35 @@ import {
 import { CollisionAnimation } from './collisionAnimation.js';
 import { FloatingMessages } from './floatingMessages.js';
 
+/** Checks intersection of two rectangles (AABB). */
+function checkAABB(a, b) {
+	return (
+		a.x < b.x + b.width &&
+		a.x + a.width > b.x &&
+		a.y < b.y + b.height &&
+		a.y + a.height > b.y
+	);
+}
+
 export class Player {
 	constructor(game) {
 		this.game = game;
-		this.width = 129;
-		this.height = 129;
+		const p = CONFIG.player;
+		this.width = p.width;
+		this.height = p.height;
 		this.x = 0;
 		this.y = this.game.height - this.height - this.game.groundMargin;
 		this.vy = 0;
-		this.weight = 1;
+		this.weight = p.weight;
 		this.image = document.getElementById('player');
 		this.frameX = 0;
 		this.frameY = 0;
-		this.maxFrame;
-		this.fps = 15;
+		this.maxFrame = 0;
+		this.fps = p.fps;
 		this.frameInterval = 1500 / this.fps;
 		this.frameTimer = 0;
 		this.speed = 0;
-		this.maxSpeed = 2;
+		this.maxSpeed = p.maxSpeed;
 		this.states = [
 			new Sitting(this.game),
 			new Running(this.game),
@@ -48,12 +61,12 @@ export class Player {
 		this.x += this.speed;
 		if (
 			input.includes('ArrowRight') &&
-			this.currentState !== this.states[6]
+			this.currentState !== this.states[states.HIT]
 		)
 			this.speed = this.maxSpeed;
 		else if (
 			input.includes('ArrowLeft') &&
-			this.currentState !== this.states[6]
+			this.currentState !== this.states[states.HIT]
 		)
 			this.speed = -this.maxSpeed;
 		else this.speed = 0;
@@ -72,7 +85,7 @@ export class Player {
 		if (this.y > this.game.height - this.height - this.game.groundMargin)
 			this.y = this.game.height - this.height - this.game.groundMargin;
 
-		// sprite anumation
+		// sprite animation
 		if (this.frameTimer > this.frameInterval) {
 			this.frameTimer = 0;
 			if (this.frameX < this.maxFrame) this.frameX++;
@@ -104,128 +117,72 @@ export class Player {
 		);
 	}
 
-	setState(state, speed) {
-		this.currentState = this.states[state];
+		setState(stateIndex, speed) {
+		this.currentState = this.states[stateIndex];
 		this.game.speed = this.game.maxSpeed * speed;
 		this.currentState.enter();
 	}
 
+	/** Adds collision effect and optionally a floating message. */
+	triggerCollisionEffect(entity, messageText = null) {
+		this.game.collisions.push(
+			new CollisionAnimation(
+				this.game,
+				entity.x + entity.width * 0.5,
+				entity.y + entity.height * 0.5
+			)
+		);
+		if (messageText) {
+			const { targetX, targetY } = CONFIG.floatingMessage;
+			this.game.floatingMessages.push(
+				new FloatingMessages(messageText, entity.x, entity.y, targetX, targetY)
+			);
+		}
+	}
+
+	get isAttacking() {
+		return (
+			this.currentState === this.states[states.ROLLING] ||
+			this.currentState === this.states[states.DIVING]
+		);
+	}
+
 	checkCollision() {
 		this.game.enemies.forEach((enemy) => {
-			if (
-				enemy.x < this.x + this.width &&
-				enemy.x + enemy.width > this.x &&
-				enemy.y < this.y + this.height &&
-				enemy.y + enemy.height > this.y
-			) {
-				enemy.markedForDeletion = true;
-				this.game.collisions.push(
-					new CollisionAnimation(
-						this.game,
-						enemy.x + enemy.width * 0.5,
-						enemy.y + enemy.height * 0.5
-					)
-				);
-				if (
-					this.currentState === this.states[4] ||
-					this.currentState === this.states[5]
-				) {
-					this.game.score++;
-					this.game.floatingMessages.push(
-						new FloatingMessages('+1', enemy.x, enemy.y, 130, 50)
-					);
-				} else {
-					this.setState(6, 0);
-					this.game.score -= 5;
-					this.game.hearts--;
-
-					if (this.game.hearts <= 0) this.game.gameOver = true;
-				}
+			if (!checkAABB(this, enemy)) return;
+			enemy.markedForDeletion = true;
+			this.triggerCollisionEffect(enemy, this.isAttacking ? '+1' : null);
+			if (this.isAttacking) {
+				this.game.score++;
+			} else {
+				this.setState(states.HIT, 0);
+				this.game.score -= 5;
+				this.game.hearts--;
+				if (this.game.hearts <= 0) this.game.gameOver = true;
 			}
 		});
 
 		this.game.friends.forEach((friend) => {
-			if (
-				friend.x < this.x + this.width &&
-				friend.x + friend.width > this.x &&
-				friend.y < this.y + this.height &&
-				friend.y + friend.height > this.y
-			) {
-				friend.markedForDeletion = true;
-				this.game.collisions.push(
-					new CollisionAnimation(
-						this.game,
-						friend.x + friend.width * 0.5,
-						friend.y + friend.height * 0.5
-					)
-				);
-				if (
-					this.currentState === this.states[4] ||
-					this.currentState === this.states[5]
-				) {
-					this.game.score -= 5;
-					this.game.floatingMessages.push(
-						new FloatingMessages(
-							'ooops',
-							friend.x,
-							friend.y,
-							130,
-							50
-						)
-					);
-				} else {
-					this.game.score += 10;
-
-					this.game.floatingMessages.push(
-						new FloatingMessages('+10', friend.x, friend.y, 130, 50)
-					);
-					if (this.game.hearts <= 0) this.game.gameOver = true;
-				}
+			if (!checkAABB(this, friend)) return;
+			friend.markedForDeletion = true;
+			const friendMessage = this.isAttacking ? 'ooops' : '+10';
+			this.triggerCollisionEffect(friend, friendMessage);
+			if (this.isAttacking) {
+				this.game.score -= 5;
+			} else {
+				this.game.score += 10;
 			}
 		});
 
 		this.game.heartsFriend.forEach((heartFriend) => {
-			if (
-				heartFriend.x < this.x + this.width &&
-				heartFriend.x + heartFriend.width > this.x &&
-				heartFriend.y < this.y + this.height &&
-				heartFriend.y + heartFriend.height > this.y
-			) {
-				heartFriend.markedForDeletion = true;
-				this.game.collisions.push(
-					new CollisionAnimation(
-						this.game,
-						heartFriend.x + heartFriend.width * 0.5,
-						heartFriend.y + heartFriend.height * 0.5
-					)
-				);
-				if (
-					this.currentState === this.states[4] ||
-					this.currentState === this.states[5]
-				) {
-					this.game.score -= 5;
-					this.game.floatingMessages.push(
-						new FloatingMessages(
-							'ooops',
-							heartFriend.x,
-							heartFriend.y,
-							130,
-							50
-						)
-					);
-				} else {
-					this.game.hearts++;
-
-					this.game.floatingMessages.push(
-						new FloatingMessages(
-							'+♥',
-							heartFriend.x,
-							heartFriend.y,
-							130,
-							50
-						)
-					);
-				}
+			if (!checkAABB(this, heartFriend)) return;
+			heartFriend.markedForDeletion = true;
+			const heartMessage = this.isAttacking ? 'ooops' : '+♥';
+			this.triggerCollisionEffect(heartFriend, heartMessage);
+			if (this.isAttacking) {
+				this.game.score -= 5;
+			} else {
+				this.game.hearts++;
 			}
 		});
 	}

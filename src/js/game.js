@@ -1,10 +1,5 @@
-import { Player } from './player.js';
-import { InputHandler } from './input.js';
-import { Background } from './background.js';
-import { FlyingEnemy, GroundEnemy, ClimbingEnemy } from './enemies.js';
-import { FlyingFriend } from './friends.js';
-import { GroundFriend } from './hearts.js';
-import { UI } from './UI.js';
+import { CONFIG } from './config.js';
+import { Game } from './gameCore.js';
 
 class GameController {
 	constructor(canvas) {
@@ -92,6 +87,7 @@ class GameController {
 	}
 
 	restartGame() {
+		if (!this.game) return;
 		this.stopAnimation();
 		this.game.reset();
 		this.lastTime = performance.now();
@@ -99,10 +95,14 @@ class GameController {
 	}
 
 	stopAnimation() {
-		cancelAnimationFrame(this.animationId);
+		if (this.animationId !== null) {
+			cancelAnimationFrame(this.animationId);
+			this.animationId = null;
+		}
 	}
 
 	pauseGame() {
+		if (!this.game) return;
 		this.game.gamePause = !this.game.gamePause;
 		if (!this.game.gamePause) {
 			this.stopAnimation();
@@ -160,153 +160,8 @@ class GameController {
 
 window.addEventListener('load', function () {
 	const canvas = document.getElementById('canvas1');
-	canvas.width = 1000;
-	canvas.height = 500;
+	canvas.width = CONFIG.canvas.width;
+	canvas.height = CONFIG.canvas.height;
 
 	new GameController(canvas);
 });
-
-class Game {
-	constructor(width, height) {
-		this.width = width;
-		this.height = height;
-		this.maxSpeed = 3;
-		this.reset();
-	}
-
-	reset() {
-		this.groundMargin = 40;
-		this.speed = 0;
-		this.background = new Background(this);
-		this.player = new Player(this);
-		this.input = new InputHandler(this);
-		this.UI = new UI(this);
-
-		this.enemies = [];
-		this.friends = [];
-		this.heartsFriend = [];
-		this.particles = [];
-		this.collisions = [];
-		this.floatingMessages = [];
-
-		this.maxParticles = 50;
-		this.enemyTimer = 0;
-		this.enemyInterval = 1000;
-		this.friendTimer = 0;
-		this.friendInterval = 1000;
-		this.heartsFriendTimer = 0;
-		this.heartsFriendInterval = 5000;
-
-		this.debug = false;
-		this.score = 0;
-		this.winningScore = 40;
-		this.fontColor = 'black';
-		this.time = 0;
-		this.maxTime = 60000;
-		this.gameOver = false;
-		this.hearts = 5;
-
-		this.player.currentState = this.player.states[0];
-		this.player.currentState.enter();
-	}
-
-	update(deltaTime) {
-		this.time += deltaTime;
-		if (this.time > this.maxTime) this.gameOver = true;
-
-		this.background.update();
-		this.player.update(this.input.keys, deltaTime);
-
-		// handleEnemies
-		if (this.enemyTimer > this.enemyInterval) {
-			this.addEnemy();
-			this.enemyTimer = 0;
-		} else {
-			this.enemyTimer += deltaTime;
-		}
-		this.enemies.forEach((enemy) => enemy.update(deltaTime));
-
-		// handleFriends
-		if (this.friendTimer > this.friendInterval) {
-			this.addFriend();
-			this.friendTimer = 0;
-		} else {
-			this.friendTimer += deltaTime;
-		}
-		this.friends.forEach((friend) => friend.update(deltaTime));
-
-		this.heartsFriend.forEach((heartFriend) =>
-			heartFriend.update(deltaTime)
-		);
-
-		if (this.heartsFriendTimer > this.heartsFriendInterval) {
-			this.addHearts();
-			this.heartsFriendTimer = 0;
-		} else {
-			this.heartsFriendTimer += deltaTime;
-		}
-
-		// handle messages
-		this.floatingMessages.forEach((message) => message.update());
-
-		//handle particles
-		this.particles.forEach((particle) => particle.update());
-		if (this.particles.length > this.maxParticles) {
-			this.particles.length = this.maxParticles;
-		}
-
-		// handle collision sprites
-		this.collisions.forEach((collision) => collision.update(deltaTime));
-
-		this.enemies = this.enemies.filter((enemy) => !enemy.markedForDeletion);
-		this.friends = this.friends.filter(
-			(friend) => !friend.markedForDeletion
-		);
-		this.heartsFriend = this.heartsFriend.filter(
-			(heartFriend) => !heartFriend.markedForDeletion
-		);
-		this.particles = this.particles.filter(
-			(particle) => !particle.markedForDeletion
-		);
-		this.collisions = this.collisions.filter(
-			(collision) => !collision.markedForDeletion
-		);
-		this.floatingMessages = this.floatingMessages.filter(
-			(message) => !message.markedForDeletion
-		);
-	}
-
-	draw(context) {
-		this.background.draw(context);
-		this.particles.forEach((particle) => particle.draw(context));
-		this.player.draw(context);
-		this.enemies.forEach((enemy) => enemy.draw(context));
-		this.friends.forEach((friend) => friend.draw(context));
-		this.heartsFriend.forEach((heartFriend) => heartFriend.draw(context));
-		this.collisions.forEach((collision) => collision.draw(context));
-		this.floatingMessages.forEach((message) => message.draw(context));
-		this.UI.draw(context);
-	}
-
-	addEnemy() {
-		if (this.enemies.length < 2) {
-			if (this.speed > 0 && Math.random() < 0.5)
-				this.enemies.push(new GroundEnemy(this));
-			else if (this.speed > 0) this.enemies.push(new ClimbingEnemy(this));
-			this.enemies.push(new FlyingEnemy(this));
-		}
-	}
-
-	addFriend() {
-		if (this.friends.length < 1) {
-			if (this.speed > 0 && Math.random() < 0.5)
-				this.friends.push(new FlyingFriend(this));
-		}
-	}
-
-	addHearts() {
-		if (this.hearts < 5) {
-			this.heartsFriend.push(new GroundFriend(this));
-		}
-	}
-}
