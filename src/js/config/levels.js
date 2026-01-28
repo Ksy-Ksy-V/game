@@ -1,0 +1,108 @@
+/**
+ * Cat Game level definitions.
+ * enemies: 'flying' (ghost), 'climbing' (spider), 'ground' (plant)
+ * friends: 'flying' (potion), 'hearts' (heart pickups) — hearts from level 2 onward
+ */
+export const LEVELS = [
+	{
+		index: 0,
+		name: 'Level 1',
+		title: 'First steps',
+		rules: 'Run through the city and collect 5 hearts. You have no lives yet — collect hearts to get them! Use arrows to move.',
+		initialHearts: 0,
+		heartsToCollectToWin: 5,
+		maxTime: 30000,
+		winningScore: null,
+		speedModifier: 1,
+		enemies: [],
+		friends: ['hearts'],
+		heartsFriendInterval: 2000,
+		hint: null,
+	},
+	{
+		index: 1,
+		name: 'Level 2',
+		title: 'The plant',
+		rules: 'You have 5 lives. A plant enemy appears! Attack it with Space (roll) or Down in the air (dive) to defeat it and earn points. Collect hearts to restore lives.',
+		initialHearts: 5,
+		heartsToCollectToWin: null,
+		maxTime: 30000,
+		winningScore: 10,
+		speedModifier: 0.5,
+		enemies: ['ground'],
+		friends: ['hearts'],
+		enemyInterval: 1200,
+		heartsFriendInterval: 5000,
+		hint: 'Attack the plant with Space or Down when diving!',
+	},
+	{
+		index: 2,
+		name: 'Level 3',
+		title: 'Plant and spider',
+		rules: 'Same as before, but now a spider climbs down from above. Attack both enemies to score. Collect hearts. Reach the target score before time runs out.',
+		initialHearts: 5,
+		heartsToCollectToWin: null,
+		maxTime: 30000,
+		winningScore: 12,
+		speedModifier: 1,
+		enemies: ['ground', 'climbing'],
+		friends: ['hearts'],
+		enemyInterval: 2000,
+		heartsFriendInterval: 5000,
+		hint: null,
+	},
+	{
+		index: 3,
+		name: 'Level 4',
+		title: 'The potion',
+		rules: 'A friendly potion flies across the screen. Collect it WITHOUT attacking to get +10 points. If you attack it, you lose 5 points. Plant and spider enemies. Collect hearts to restore lives.',
+		initialHearts: 5,
+		heartsToCollectToWin: null,
+		maxTime: 30000,
+		winningScore: 15,
+		speedModifier: 1,
+		enemies: ['ground', 'climbing'],
+		friends: ['flying', 'hearts'],
+		enemyInterval: 2000,
+		friendInterval: 4000,
+		heartsFriendInterval: 5000,
+		hint: 'Collect the potion without attacking to get +10 points!',
+	},
+	{
+		index: 4,
+		name: 'Level 5',
+		title: 'All together',
+		rules: 'All enemies (ghost, spider, plant) and all friends (potion and hearts). Attack enemies, collect friends without attacking, and reach the target score!',
+		initialHearts: 5,
+		heartsToCollectToWin: null,
+		maxTime: 30000,
+		winningScore: 20,
+		speedModifier: 1,
+		enemies: ['flying', 'climbing', 'ground'],
+		friends: ['flying', 'hearts'],
+		enemyInterval: 1500,
+		friendInterval: 3000,
+		heartsFriendInterval: 5000,
+		hint: null,
+	},
+];
+
+export const TOTAL_LEVELS = LEVELS.length;
+
+/** Full config for endless modes (same as level 5 content). */
+export function getEndlessConfig() {
+	return {
+		index: -1,
+		mode: null,
+		initialHearts: 5,
+		heartsToCollectToWin: null,
+		maxTime: null,
+		winningScore: null,
+		speedModifier: 1,
+		enemies: ['flying', 'climbing', 'ground'],
+		friends: ['flying', 'hearts'],
+		enemyInterval: 1500,
+		friendInterval: 3000,
+		heartsFriendInterval: 5000,
+	};
+}

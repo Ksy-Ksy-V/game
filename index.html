@@ -32,32 +32,21 @@
 		<link rel="stylesheet" href="style.css" />
 	</head>
 	<body>
-		<div id="startScreen">
-        <h1>Welcome to the Game!</h1>
-        <p>Use the following controls to play:</p>
-        <div class="controls-container">
-          <div class="move-controls">
-            <div class="key">↑</div>
-            <div class="horizontal-keys">
-              <div class="key">←</div>
-              <div class="key">↓</div>
-              <div class="key">→</div>
-            </div>
-            <div>Moves</div>
-          </div>
-          <div class="action-controls">
-            <li>
-              <div class="key space-key">Space</div>
-              Attack
-            </li>
-            <li>
-              <div class="key space-key">Escape</div>
-              Pause
-            </li>
-          </div>
-        </div>
-        <button id="startButton">Start!</button>
-      </div>
+		<div id="mainMenu">
+			<h1>Choose a game</h1>
+			<div class="game-list">
+				<button id="playCatGame" class="game-button">Cat Game</button>
+			</div>
+		</div>
+
+		<div id="startScreen" style="display: none;">
+			<h1 id="startScreenTitle">Cat Game</h1>
+			<p class="level-select-label">Test: choose level</p>
+			<div id="levelSelect" class="level-select-buttons"></div>
+			<p id="startScreenRules" class="level-rules"></p>
+			<p id="startScreenHint" class="level-hint" style="display: none;"></p>
+			<button id="startButton">Start Level 1</button>
+		</div>
 
 		<canvas id="canvas1"></canvas>
 

@@ -183,6 +183,8 @@ export class Player {
 				this.game.score -= 5;
 			} else {
 				this.game.hearts++;
+				if (this.game.heartsCollected != null)
+					this.game.heartsCollected++;
 			}
 		});
 	}
