@@ -1,4 +1,4 @@
-import { Dust, Fire, Splash } from './particles.js';
+import { Dust, Fire, Splash } from '../effects/particles.js';
 
 /** Player state indices. Use these instead of numbers (e.g. states.ROLLING instead of 4). */
 export const states = {

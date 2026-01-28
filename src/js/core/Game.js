@@ -1,12 +1,12 @@
-import { CONFIG } from './config.js';
-import { Player } from './player.js';
-import { InputHandler } from './input.js';
-import { Background } from './background.js';
-import { FlyingEnemy, GroundEnemy, ClimbingEnemy } from './enemies.js';
-import { FlyingFriend } from './friends.js';
-import { GroundFriend } from './hearts.js';
-import { UI } from './UI.js';
-import { states } from './playerStates.js';
+import { CONFIG } from '../config/config.js';
+import { Player } from '../entities/player.js';
+import { InputHandler } from '../input/input.js';
+import { Background } from '../world/background.js';
+import { FlyingEnemy, GroundEnemy, ClimbingEnemy } from '../entities/enemies.js';
+import { FlyingFriend } from '../entities/friends.js';
+import { GroundFriend } from '../entities/hearts.js';
+import { UI } from '../ui/UI.js';
+import { states } from '../entities/playerStates.js';
 
 export class Game {
 	constructor(width, height) {

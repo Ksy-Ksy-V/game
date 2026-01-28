@@ -77,7 +77,7 @@ export class Splash extends Particles {
     this.image = document.getElementById('fire');
   }
   update(deltaTime) {
-    super.update();
+    super.update(deltaTime);
     const gravityAcceleration = 0.1 * (deltaTime / 16.67); // Normalize to 60 FPS
     this.gravity += gravityAcceleration;
     this.y += this.gravity;
@@ -107,7 +107,7 @@ export class Fire extends Particles {
     this.spriteHeight = 25;
   }
   update(deltaTime) {
-    super.update();
+    super.update(deltaTime);
 
     if (this.frameTimer > this.frameInterval) {
       this.frameTimer = 0;

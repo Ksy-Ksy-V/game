@@ -1,4 +1,4 @@
-import { CONFIG } from './config.js';
+import { CONFIG } from '../config/config.js';
 
 class Layer {
   constructor(game, width, height, speedModifier, image) {

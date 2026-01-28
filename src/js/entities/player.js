@@ -1,4 +1,4 @@
-import { CONFIG } from './config.js';
+import { CONFIG } from '../config/config.js';
 import {
 	states,
 	Sitting,
@@ -9,8 +9,8 @@ import {
 	Diving,
 	Hit,
 } from './playerStates.js';
-import { CollisionAnimation } from './collisionAnimation.js';
-import { FloatingMessages } from './floatingMessages.js';
+import { CollisionAnimation } from '../effects/collisionAnimation.js';
+import { FloatingMessages } from '../effects/floatingMessages.js';
 
 /** Checks intersection of two rectangles (AABB). */
 function checkAABB(a, b) {
@@ -117,7 +117,7 @@ export class Player {
 		);
 	}
 
-		setState(stateIndex, speed) {
+	setState(stateIndex, speed) {
 		this.currentState = this.states[stateIndex];
 		this.game.speed = this.game.maxSpeed * speed;
 		this.currentState.enter();

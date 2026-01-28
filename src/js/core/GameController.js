@@ -1,7 +1,7 @@
-import { CONFIG } from './config.js';
-import { Game } from './gameCore.js';
+import { CONFIG } from '../config/config.js';
+import { Game } from './Game.js';
 
-class GameController {
+export class GameController {
 	constructor(canvas) {
 		this.canvas = canvas;
 		this.ctx = canvas.getContext('2d');
@@ -157,11 +157,3 @@ class GameController {
 		}
 	}
 }
-
-window.addEventListener('load', function () {
-	const canvas = document.getElementById('canvas1');
-	canvas.width = CONFIG.canvas.width;
-	canvas.height = CONFIG.canvas.height;
-
-	new GameController(canvas);
-});
