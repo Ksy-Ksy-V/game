@@ -1,24 +1,25 @@
-# Cat Game – 2D Retro Platformer
+# PIXEL PLAY – 2D Retro Platformer
 
 A pixel-art 2D platformer built with **JavaScript** and **Canvas API**.
 The game features smooth **sprite animations**, custom-designed levels,
 and a retro aesthetic inspired by classic arcade games.
 
-## 🎮 Play the Game
+
+#  Play the Game
 
 Try it out [here!](https://game-iota-six.vercel.app/)
 
-## ✨ Features
+![Start Screen](https://i.postimg.cc/0540WL1m/Screenshot-2026-01-29-012012.png)
 
-- 🎨 **Hand-drawn pixel-art** assets with smooth **sprite animations**.
-- 🏃 **Platformer mechanics** – jump, move, and avoid obstacles.
-- 🕹️ **Keyboard controls** for smooth movement.
+#  Features
 
-## Controls
+-  **Hand-drawn pixel-art** assets with smooth **sprite animations**.
+-  **Platformer mechanics** – jump, move, and avoid obstacles.
+-  **Keyboard controls** for smooth movement.
 
-![Start Screen](https://i.postimg.cc/NjxqjmCJ/screencapture-game-iota-six-vercel-app-2025-02-25-18-29-21.png)
+# Controls
 
-🕹 Controls
+![Start Screen](https://i.postimg.cc/7Z8MD06w/Screenshot-2026-01-29-012033.png)
 
 - ⬇ Down Arrow – Crouch
 - ⬆ Up Arrow – Jump
@@ -26,34 +27,35 @@ Try it out [here!](https://game-iota-six.vercel.app/)
 - Spacebar – Attack
 - Esc – Pause
 
----
+#  Game Mechanics
 
-## 🐈 Game Mechanics
-
-🏙 The Main Character
+## The Main Character
 You play as a cat running through the city, avoiding obstacles and fighting enemies.
 
-❤️ Power-ups & Items
+![Start Screen](https://i.postimg.cc/YSfw864h/game-main-prev.png)
+
+## Power-ups & Items
 
 - Potion (+10 points when caught without attack, -5 if attacked)
 - Heart (+1 life when collected)
 
-👾 Enemies
+![Start Screen](https://i.postimg.cc/rmf22qNK/game-friends-prev.png)
+
+## Enemies
 
 - Spider, Ghost, and Fireball
 - With attack: Defeating an enemy adds +1 point
 - Without attack: Getting hit removes 1 life
 
----
+![Start Screen](https://i.postimg.cc/L57dhv7d/game-anemis-prev.png)
 
-## Music & sound
+# Music & sound
 
 - **Background music** – Loops from the moment you press Play on the main menu.
 - **SFX** – Jump, attack, hit (enemy/spider), potion, heart, game over, win.
 
----
 
-## Game modes
+# Game modes
 
 | Mode            | Description                                                                                                                                       |
 | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -63,9 +65,8 @@ You play as a cat running through the city, avoiding obstacles and fighting enem
 
 Training is for new players (main menu → Play → Start Level). Time attack and Score are for returning players (Already played → Play for time / Play for points).
 
----
 
-## Training levels
+# Training levels
 
 | Level | Title            | Goal                                                                                       |
 | ----- | ---------------- | ------------------------------------------------------------------------------------------ |
@@ -75,17 +76,15 @@ Training is for new players (main menu → Play → Start Level). Time attack an
 | 4     | The potion       | 5 lives. Potion (+10 without attack, −5 if attacked), ghost + spider. Score 15 in 30 s.    |
 | 5     | All together     | 5 lives. All enemies (ghost, spider, fire) and friends (potion, hearts). Score 20 in 30 s. |
 
----
 
-## Tech stack
+# Tech stack
 
 - **Frontend:** JavaScript (ES6+), Canvas API, HTML5, CSS3
 - **Graphics & Animation:** Sprite Sheets & Animation
 - **Deployment:** Vercel
 
----
 
-## Run locally
+# Run locally
 
 Open `index.html` in a modern browser, or run a local server (ES modules):
 
