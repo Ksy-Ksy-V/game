@@ -10,9 +10,9 @@ class Layer {
     this.x = 0;
     this.y = 0;
   }
-  update() {
+  update(factor = 1) {
     if (this.x < -this.width) this.x = 0;
-    else this.x -= this.game.speed * this.speedModifier;
+    else this.x -= this.game.speed * this.speedModifier * factor;
   }
   draw(context) {
     context.drawImage(this.image, this.x, this.y, this.width, this.height);
@@ -39,9 +39,9 @@ export class Background {
     this.backgroundLayers = [this.layer1, this.layer2, this.layer3, this.layer4, this.layer5];
   }
 
-  update() {
+  update(factor = 1) {
     this.backgroundLayers.forEach((layer) => {
-      layer.update();
+      layer.update(factor);
     });
   }
 
