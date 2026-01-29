@@ -3,7 +3,6 @@
    ============================================================ */
 
 :root {
-  /* --- Design system: нейтрально-розовая палитра (одна гамма) --- */
   --retro-primary: #b8707d;
   --retro-primary-hover: #c98a96;
   --retro-primary-active: #8e565f;
@@ -35,7 +34,6 @@
   --soft-pink: #e8b4bc;
   --cloud-color: rgba(255, 255, 255, 0.92);
 
-  /* --- Design system: типографика --- */
   --retro-font: 'Press Start 2P', 'Courier New', monospace;
   --retro-font-size-xs: 0.7rem;
   --retro-font-size-sm: 0.9rem;
@@ -60,7 +58,6 @@
   --text-xl: var(--retro-font-size-xl);
   --text-title: var(--retro-font-size-title);
 
-  /* --- Design system: кнопки (retro-tab / button style) --- */
   --retro-btn-bg: var(--retro-primary);
   --retro-btn-bg-hover: var(--retro-primary-hover);
   --retro-btn-bg-active: var(--retro-primary-active);
@@ -108,7 +105,7 @@ html {
   background-color: var(--retro-bg);
 }
 
-/* Loading overlay: does not block clicks, hidden when .loaded is set */
+/* Loading overlay: */
 .loading-overlay {
   position: fixed;
   inset: 0;
