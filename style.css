@@ -108,7 +108,7 @@ html {
   background-color: var(--retro-bg);
 }
 
-/* Loading overlay: hidden when .loaded is set */
+/* Loading overlay: does not block clicks, hidden when .loaded is set */
 .loading-overlay {
   position: fixed;
   inset: 0;
@@ -121,6 +121,7 @@ html {
   background: var(--retro-bg);
   color: var(--retro-text);
   font-size: var(--text-md);
+  pointer-events: none; /* never block Play / Start */
   transition:
     opacity 0.3s ease,
     visibility 0.3s ease;
@@ -128,7 +129,6 @@ html {
 .loading-overlay.loaded {
   opacity: 0;
   visibility: hidden;
-  pointer-events: none;
 }
 .loading-overlay .loading-error {
   color: var(--retro-accent);

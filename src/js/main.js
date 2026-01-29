@@ -3,7 +3,8 @@ import { GameController } from './core/GameController.js';
 import { loadCriticalImages } from './core/AssetLoader.js';
 
 /**
- * Entry point: load critical assets, then init game.
+ * Entry point: init game on load. Critical images are preloaded in background;
+ * overlay hides when ready (game starts immediately so play is not blocked).
  */
 window.addEventListener('load', function () {
   const canvas = document.getElementById('canvas1');
@@ -14,16 +15,12 @@ window.addEventListener('load', function () {
   loadCriticalImages()
     .then(() => {
       if (loadingEl) loadingEl.classList.add('loaded');
-      new GameController(canvas);
     })
     .catch((err) => {
-      console.error('AssetLoader:', err);
-      if (loadingEl) {
-        const errEl = loadingEl.querySelector('.loading-error');
-        if (errEl) {
-          errEl.style.display = 'block';
-          errEl.textContent = 'Failed to load game assets. Refresh the page.';
-        }
-      }
+      console.warn('AssetLoader:', err);
+      if (loadingEl) loadingEl.classList.add('loaded');
     });
+
+  new GameController(canvas);
+  if (loadingEl) loadingEl.classList.add('loaded');
 });

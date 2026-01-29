@@ -127,7 +127,13 @@ export class GameController {
 
     d.btnUserNew.addEventListener('click', () => controller.setUserType('new'));
     d.btnUserPlayed.addEventListener('click', () => controller.setUserType('played'));
-    d.startButton.addEventListener('click', () => controller.startGame(controller.currentLevelIndex));
+    d.startButton.addEventListener('click', () => {
+      try {
+        controller.startGame(controller.currentLevelIndex);
+      } catch (err) {
+        console.error('startGame failed:', err);
+      }
+    });
 
     d.btnPlayForTime.addEventListener('click', () => {
       controller.fromStartScreenForMode = true;
