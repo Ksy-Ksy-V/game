@@ -1,6 +1,7 @@
-import { Dust, Fire, Splash } from './particles.js';
+import { Dust, Fire, Splash } from '../effects/particles.js';
 
-const states = {
+/** Player state indices. Use these instead of numbers (e.g. states.ROLLING instead of 4). */
+export const states = {
 	SITTING: 0,
 	RUNNING: 1,
 	JUMPING: 2,
@@ -72,7 +73,10 @@ export class Jumping extends State {
 	}
 
 	enter() {
-		if (this.game.player.onGround()) this.game.player.vy -= 27;
+		if (this.game.player.onGround()) {
+			this.game.player.vy -= 27;
+			this.game.audioManager?.playSfx('jump');
+		}
 		this.game.player.frameX = 0;
 		this.game.player.maxFrame = 7;
 		this.game.player.frameY = 1;
