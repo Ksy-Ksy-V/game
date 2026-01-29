@@ -1,10 +1,12 @@
 import { CONFIG } from '../config/config.js';
 import { LEVELS, TOTAL_LEVELS, getEndlessConfig } from '../config/levels.js';
 import { Game } from './Game.js';
+import { AudioManager } from '../audio/AudioManager.js';
 
 export class GameController {
   constructor(canvas) {
     this.canvas = canvas;
+    this.audioManager = new AudioManager();
     this.ctx = canvas.getContext('2d');
     this.game = null;
     this.currentLevelIndex = 0;
@@ -246,8 +248,10 @@ export class GameController {
     if (this.game) this.stopAnimation();
 
     this.currentGameIsEndless = false;
+    this.gameOverSoundPlayed = false;
+    this.winSoundPlayed = false;
     const levelConfig = LEVELS[levelIndex];
-    this.game = new Game(this.canvas.width, this.canvas.height, levelConfig);
+    this.game = new Game(this.canvas.width, this.canvas.height, levelConfig, this.audioManager);
     this.game.time = 0;
     this.game.gamePause = false;
     this.lastTime = performance.now();
@@ -265,7 +269,9 @@ export class GameController {
     if (this.game) this.stopAnimation();
 
     this.currentGameIsEndless = true;
-    this.game = new Game(this.canvas.width, this.canvas.height, levelConfig);
+    this.gameOverSoundPlayed = false;
+    this.winSoundPlayed = false;
+    this.game = new Game(this.canvas.width, this.canvas.height, levelConfig, this.audioManager);
     this.game.time = 0;
     this.game.gamePause = false;
     this.lastTime = performance.now();
@@ -301,6 +307,7 @@ export class GameController {
     const controller = this;
 
     document.getElementById('playCatGame').addEventListener('click', () => {
+      controller.audioManager.playMusic('background');
       controller.showLevelStartScreen(0);
     });
 
@@ -376,15 +383,23 @@ export class GameController {
       this.animationId = requestAnimationFrame(this.animate.bind(this));
     } else {
       this.gameOverScreen.style.display = 'flex';
+      if (!this.game.win && !this.gameOverSoundPlayed) {
+        this.audioManager.playSfx('gameOver');
+        this.gameOverSoundPlayed = true;
+      } else if (this.game.win && !this.winSoundPlayed) {
+        this.audioManager.playSfx('win');
+        this.winSoundPlayed = true;
+      }
       const nextBtn = this.gameOverScreen.querySelector('#nextLevelButton');
       const chooseModeBtn = this.gameOverScreen.querySelector('#chooseModeButton');
       const hasNext = this.currentLevelIndex + 1 < TOTAL_LEVELS;
+      const showNextLevel = this.game.win && hasNext && !this.currentGameIsEndless;
       const isLevel5Win = this.game.win && this.currentLevelIndex === TOTAL_LEVELS - 1 && !this.currentGameIsEndless;
 
-      nextBtn.style.display = this.game.win && hasNext ? 'inline-block' : 'none';
+      nextBtn.style.display = showNextLevel ? 'inline-block' : 'none';
       chooseModeBtn.style.display = isLevel5Win ? 'inline-block' : 'none';
 
-      if (this.game.win && hasNext) {
+      if (showNextLevel) {
         nextBtn.textContent = 'Next Level (' + (this.currentLevelIndex + 2) + ')';
       }
     }

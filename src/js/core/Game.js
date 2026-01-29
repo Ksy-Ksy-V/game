@@ -10,11 +10,12 @@ import { UI } from '../ui/UI.js';
 import { states } from '../entities/playerStates.js';
 
 export class Game {
-  constructor(width, height, levelConfig) {
+  constructor(width, height, levelConfig, audioManager = null) {
     this.width = width;
     this.height = height;
     this.levelConfig = levelConfig || LEVELS[0];
     this.levelIndex = this.levelConfig.index;
+    this.audioManager = audioManager;
     this.reset();
   }
 

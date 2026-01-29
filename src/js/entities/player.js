@@ -1,5 +1,6 @@
 import { CONFIG } from '../config/config.js';
 import { states, Sitting, Running, Jumping, Falling, Rolling, Diving, Hit } from './playerStates.js';
+import { ClimbingEnemy } from './enemies.js';
 import { CollisionAnimation } from '../effects/collisionAnimation.js';
 import { FloatingMessages } from '../effects/floatingMessages.js';
 
@@ -116,8 +117,10 @@ export class Player {
       enemy.markedForDeletion = true;
       this.triggerCollisionEffect(enemy, this.isAttacking ? '+1' : null);
       if (this.isAttacking) {
+        this.game.audioManager?.playSfx(enemy instanceof ClimbingEnemy ? 'spiderHit' : 'enemyHit');
         this.game.score++;
       } else {
+        this.game.audioManager?.playSfx('playerHit');
         this.setState(states.HIT, 0);
         this.game.score -= 5;
         this.game.hearts--;
@@ -131,6 +134,7 @@ export class Player {
       const friendMessage = this.isAttacking ? 'ooops' : '+10';
       this.triggerCollisionEffect(friend, friendMessage);
       if (this.isAttacking) {
+        this.game.audioManager?.playSfx('potionHit');
         this.game.score -= 5;
       } else {
         this.game.score += 10;
@@ -143,8 +147,10 @@ export class Player {
       const heartMessage = this.isAttacking ? 'ooops' : '+♥';
       this.triggerCollisionEffect(heartFriend, heartMessage);
       if (this.isAttacking) {
+        this.game.audioManager?.playSfx('potionHit');
         this.game.score -= 5;
       } else {
+        this.game.audioManager?.playSfx('heart');
         this.game.hearts++;
         if (this.game.heartsCollected != null) this.game.heartsCollected++;
       }

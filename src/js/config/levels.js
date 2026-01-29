@@ -1,6 +1,6 @@
 /**
  * Cat Game level definitions.
- * enemies: 'flying' (ghost), 'climbing' (spider), 'ground' (plant)
+ * enemies: 'flying' (fire), 'climbing' (spider), 'ground' (ghost)
  * friends: 'flying' (potion), 'hearts' (heart pickups) — hearts from level 2 onward
  */
 export const LEVELS = [
@@ -23,7 +23,7 @@ export const LEVELS = [
 		index: 1,
 		name: 'Level 2',
 		title: 'The plant',
-		rules: 'You have 5 lives. A plant enemy appears! Attack it with Space (roll) or Down in the air (dive) to defeat it and earn points. Collect hearts to restore lives.',
+		rules: 'You have 5 lives. A ghost enemy appears! Attack it with Space (roll) or Down in the air (dive) to defeat it and earn points. Collect hearts to restore lives.',
 		initialHearts: 5,
 		heartsToCollectToWin: null,
 		maxTime: 30000,
@@ -33,7 +33,7 @@ export const LEVELS = [
 		friends: ['hearts'],
 		enemyInterval: 1200,
 		heartsFriendInterval: 5000,
-		hint: 'Attack the plant with Space or Down when diving!',
+		hint: 'Attack the ghost with Space or Down when diving!',
 	},
 	{
 		index: 2,
@@ -72,7 +72,7 @@ export const LEVELS = [
 		index: 4,
 		name: 'Level 5',
 		title: 'All together',
-		rules: 'All enemies (ghost, spider, plant) and all friends (potion and hearts). Attack enemies, collect friends without attacking, and reach the target score!',
+		rules: 'All enemies (ghost, spider, fire) and all friends (potion and hearts). Attack enemies, collect friends without attacking, and reach the target score!',
 		initialHearts: 5,
 		heartsToCollectToWin: null,
 		maxTime: 30000,

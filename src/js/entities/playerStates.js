@@ -73,7 +73,10 @@ export class Jumping extends State {
 	}
 
 	enter() {
-		if (this.game.player.onGround()) this.game.player.vy -= 27;
+		if (this.game.player.onGround()) {
+			this.game.player.vy -= 27;
+			this.game.audioManager?.playSfx('jump');
+		}
 		this.game.player.frameX = 0;
 		this.game.player.maxFrame = 7;
 		this.game.player.frameY = 1;
