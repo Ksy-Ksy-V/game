@@ -1,3 +1,5 @@
+import { MODES } from '../config/constants.js';
+
 export class UI {
   constructor(game) {
     this.game = game;
@@ -20,9 +22,9 @@ export class UI {
     context.fillStyle = this.game.fontColor;
 
     const mode = this.game.levelConfig?.mode;
-    if (mode === 'time_attack') {
+    if (mode === MODES.TIME_ATTACK) {
       context.fillText('Time attack', 20, 50);
-    } else if (mode === 'until_lose') {
+    } else if (mode === MODES.UNTIL_LOSE) {
       context.fillText('Until lose', 20, 50);
     } else {
       const levelNum = (this.game.levelIndex ?? 0) + 1;
@@ -34,13 +36,13 @@ export class UI {
       const target = this.game.levelConfig.heartsToCollectToWin;
       const collected = this.game.heartsCollected ?? 0;
       context.fillText('Hearts: ' + collected + ' / ' + target, 20, 80);
-    } else if (mode === 'time_attack' && this.game.maxTime != null) {
+    } else if (mode === MODES.TIME_ATTACK && this.game.maxTime != null) {
       const timeLeftSec = Math.max(0, (this.game.maxTime - this.game.time) * 0.001);
       const timeStr =
         timeLeftSec >= 60 ? Math.floor(timeLeftSec / 60) + '.' + (timeLeftSec % 60).toFixed(1) : timeLeftSec.toFixed(1);
       context.fillText('Time left: ' + timeStr, 20, 80);
       context.fillText('Score: ' + this.game.score, 20, 110);
-    } else if (mode === 'until_lose' && this.game.winningScore != null) {
+    } else if (mode === MODES.UNTIL_LOSE && this.game.winningScore != null) {
       context.fillText('Score: ' + this.game.score + ' / ' + this.game.winningScore, 20, 80);
       context.fillText('Time: ' + (this.game.time * 0.001).toFixed(1), 20, 110);
     } else {
@@ -69,9 +71,9 @@ export class UI {
       context.font = this.fontSize * 1.5 + 'px ' + this.fontFamily;
       if (this.game.win) {
         this.gameOverTitle.textContent = 'You win  ! ! !';
-        if (this.game.levelConfig?.mode === 'time_attack') {
+        if (this.game.levelConfig?.mode === MODES.TIME_ATTACK) {
           this.gameOverMessage.textContent = 'Time is up! Score: ' + this.game.score;
-        } else if (this.game.levelConfig?.mode === 'until_lose') {
+        } else if (this.game.levelConfig?.mode === MODES.UNTIL_LOSE) {
           this.gameOverMessage.textContent = 'You reached the target! Score: ' + this.game.score;
         } else if (this.game.levelIndex === 4) {
           this.gameOverMessage.textContent = 'You finished the game! Congratulations!';

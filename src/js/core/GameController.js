@@ -1,9 +1,16 @@
-import { CONFIG } from '../config/config.js';
-import { LEVELS, TOTAL_LEVELS, getEndlessConfig } from '../config/levels.js';
+import { LEVELS, TOTAL_LEVELS } from '../config/levels.js';
 import { Game } from './Game.js';
 import { AudioManager } from '../audio/AudioManager.js';
+import { ScreenManager } from './ScreenManager.js';
 
+/**
+ * Top-level controller: screens, game lifecycle, animation loop, input.
+ * Waits for assets in main.js; creates ScreenManager and Game, runs requestAnimationFrame.
+ */
 export class GameController {
+  /**
+   * @param {HTMLCanvasElement} canvas - Game canvas (sized in main.js).
+   */
   constructor(canvas) {
     this.canvas = canvas;
     this.audioManager = new AudioManager();
@@ -11,273 +18,78 @@ export class GameController {
     this.game = null;
     this.currentLevelIndex = 0;
     this.currentGameIsEndless = false;
-    this.mainMenu = document.getElementById('mainMenu');
-    this.startScreen = document.getElementById('startScreen');
-    this.pauseScreen = null;
-    this.gameOverScreen = null;
-    this.modeSelectScreen = null;
-    this.timeAttackSelect = null;
-    this.untilLoseSelect = null;
     this.animationId = null;
     this.fromStartScreenForMode = false;
-    this.skyBg = document.querySelector('.sky-bg');
-    this.initialize();
-  }
+    this.dom = null;
+    this.gameOverSoundPlayed = false;
+    this.winSoundPlayed = false;
+    this._pauseFocusSet = false;
+    this._gameOverFocusSet = false;
 
-  initialize() {
-    this.createPauseScreen();
-    this.createGameOverScreen();
-    this.createModeSelectScreens();
-    this.showMainMenu();
+    this.screens = new ScreenManager(this);
+    this.screens.createAll();
+    this.dom = this.screens.dom;
+    this.screens.showMainMenu();
     this.addEventListeners();
   }
 
-  createPauseScreen() {
-    this.pauseScreen = document.createElement('div');
-    this.pauseScreen.id = 'pauseScreen';
-    this.pauseScreen.style.display = 'none';
-
-    const heading = document.createElement('h1');
-    heading.textContent = 'Need a minute?';
-
-    const continueButton = document.createElement('button');
-    continueButton.id = 'continueButton';
-    continueButton.textContent = 'Continue Game';
-
-    this.pauseScreen.appendChild(heading);
-    this.pauseScreen.appendChild(continueButton);
-
-    document.body.appendChild(this.pauseScreen);
-  }
-
-  createGameOverScreen() {
-    this.gameOverScreen = document.createElement('div');
-    this.gameOverScreen.id = 'gameOverScreen';
-    this.gameOverScreen.style.display = 'none';
-
-    const gameOverTitle = document.createElement('h1');
-    gameOverTitle.id = 'gameOverTitle';
-
-    const gameOverMessage = document.createElement('p');
-    gameOverMessage.id = 'gameOverMessage';
-
-    const restartButton = document.createElement('button');
-    restartButton.id = 'restartButton';
-    restartButton.textContent = 'Restart Level';
-
-    const nextLevelButton = document.createElement('button');
-    nextLevelButton.id = 'nextLevelButton';
-    nextLevelButton.textContent = 'Next Level';
-
-    const chooseModeButton = document.createElement('button');
-    chooseModeButton.id = 'chooseModeButton';
-    chooseModeButton.textContent = 'Choose mode (after level 5)';
-
-    const mainMenuButton = document.createElement('button');
-    mainMenuButton.id = 'mainMenuButton';
-    mainMenuButton.textContent = 'Main Menu';
-
-    this.gameOverScreen.appendChild(gameOverTitle);
-    this.gameOverScreen.appendChild(gameOverMessage);
-    this.gameOverScreen.appendChild(restartButton);
-    this.gameOverScreen.appendChild(nextLevelButton);
-    this.gameOverScreen.appendChild(chooseModeButton);
-    this.gameOverScreen.appendChild(mainMenuButton);
-
-    document.body.appendChild(this.gameOverScreen);
-  }
-
-  createModeSelectScreens() {
-    this.modeSelectScreen = document.createElement('div');
-    this.modeSelectScreen.id = 'modeSelectScreen';
-
-    this.modeSelectScreen.innerHTML = `
-			<h2>Choose mode</h2>
-			<button id="btnTimeAttack">Play for time</button>
-			<button id="btnUntilLose">Play until lose</button>
-			<button id="btnModeBackToMenu">Main Menu</button>
-		`;
-
-    this.timeAttackSelect = document.createElement('div');
-    this.timeAttackSelect.id = 'timeAttackSelect';
-    this.timeAttackSelect.innerHTML = `
-			<h2>Choose duration</h2>
-			<button data-min="1">1 minute</button>
-			<button data-min="2">2 minutes</button>
-			<button data-min="5">5 minutes</button>
-			<button data-min="10">10 minutes</button>
-			<button id="btnTimeAttackBack">Back</button>
-		`;
-
-    this.untilLoseSelect = document.createElement('div');
-    this.untilLoseSelect.id = 'untilLoseSelect';
-    this.untilLoseSelect.innerHTML = `
-			<h2>Play until lose</h2>
-			<p>Set score target (win when you reach it)</p>
-			<input type="number" id="scoreTargetInput" value="50" min="10" max="999" />
-			<button id="btnUntilLoseStart">Start</button>
-			<button id="btnUntilLoseBack">Back</button>
-		`;
-
-    document.body.appendChild(this.modeSelectScreen);
-    document.body.appendChild(this.timeAttackSelect);
-    document.body.appendChild(this.untilLoseSelect);
-
-    this.modeSelectScreen.querySelector('#btnTimeAttack').addEventListener('click', () => {
-      this.modeSelectScreen.style.display = 'none';
-      this.timeAttackSelect.style.display = 'flex';
-    });
-
-    this.modeSelectScreen.querySelector('#btnUntilLose').addEventListener('click', () => {
-      this.modeSelectScreen.style.display = 'none';
-      this.untilLoseSelect.style.display = 'flex';
-    });
-
-    this.modeSelectScreen.querySelector('#btnModeBackToMenu').addEventListener('click', () => {
-      this.hideAllModeScreens();
-      this.showMainMenu();
-    });
-
-    this.timeAttackSelect.querySelector('#btnTimeAttackBack').addEventListener('click', () => {
-      this.timeAttackSelect.style.display = 'none';
-      if (this.fromStartScreenForMode) {
-        this.fromStartScreenForMode = false;
-        if (this.skyBg) this.skyBg.style.display = '';
-        document.body.classList.remove('game-active');
-        this.startScreen.style.display = 'flex';
-      } else {
-        this.modeSelectScreen.style.display = 'flex';
-      }
-    });
-
-    this.timeAttackSelect.querySelectorAll('[data-min]').forEach((btn) => {
-      btn.addEventListener('click', () => {
-        const minutes = parseInt(btn.dataset.min, 10);
-        const config = getEndlessConfig();
-        config.mode = 'time_attack';
-        config.maxTime = 60000 * minutes;
-        this.hideAllModeScreens();
-        this.startGameWithConfig(config);
-      });
-    });
-
-    this.untilLoseSelect.querySelector('#btnUntilLoseStart').addEventListener('click', () => {
-      const input = document.getElementById('scoreTargetInput');
-      const target = parseInt(input.value, 10) || 50;
-      const config = getEndlessConfig();
-      config.mode = 'until_lose';
-      config.maxTime = null;
-      config.winningScore = Math.max(10, target);
-      this.hideAllModeScreens();
-      this.startGameWithConfig(config);
-    });
-
-    this.untilLoseSelect.querySelector('#btnUntilLoseBack').addEventListener('click', () => {
-      this.untilLoseSelect.style.display = 'none';
-      if (this.fromStartScreenForMode) {
-        this.fromStartScreenForMode = false;
-        if (this.skyBg) this.skyBg.style.display = '';
-        document.body.classList.remove('game-active');
-        this.startScreen.style.display = 'flex';
-      } else {
-        this.modeSelectScreen.style.display = 'flex';
-      }
-    });
-  }
-
-  hideAllModeScreens() {
-    this.modeSelectScreen.style.display = 'none';
-    this.timeAttackSelect.style.display = 'none';
-    this.untilLoseSelect.style.display = 'none';
-  }
-
+  /** Show main menu and hide other screens. */
   showMainMenu() {
-    this.mainMenu.style.display = 'flex';
-    this.startScreen.style.display = 'none';
-    this.canvas.style.display = 'none';
-    this.hideAllModeScreens();
-    if (this.gameOverScreen) this.gameOverScreen.style.display = 'none';
-    if (this.skyBg) this.skyBg.style.display = '';
-    document.body.classList.remove('game-active');
+    this.screens.showMainMenu();
   }
 
+  /** @param {'new'|'played'} type */
   setUserType(type) {
-    const newActive = type === 'new';
-    document.getElementById('btnUserNew').classList.toggle('active', newActive);
-    document.getElementById('btnUserPlayed').classList.toggle('active', !newActive);
-    document.getElementById('startButtonWrap').style.display = newActive ? 'flex' : 'none';
-    document.getElementById('alreadyPlayedActions').style.display = newActive ? 'none' : 'flex';
+    this.screens.setUserType(type);
   }
 
+  /**
+   * Show level start screen (title, rules, start button).
+   * @param {number} levelIndex - Index in LEVELS.
+   */
   showLevelStartScreen(levelIndex) {
     this.currentLevelIndex = levelIndex;
-    const level = LEVELS[levelIndex];
-    this.mainMenu.style.display = 'none';
-    this.canvas.style.display = 'none';
-    this.gameOverScreen.style.display = 'none';
-    this.hideAllModeScreens();
-
-    document.getElementById('startScreenTitle').textContent = 'Cat Game — ' + level.title;
-    document.getElementById('startScreenRules').textContent = level.rules;
-    const hintEl = document.getElementById('startScreenHint');
-    if (level.hint) {
-      hintEl.textContent = '💡 ' + level.hint;
-      hintEl.style.display = 'block';
-    } else {
-      hintEl.style.display = 'none';
-    }
-    document.getElementById('startButton').textContent = 'Start Level ' + (levelIndex + 1);
-    this.setUserType('new');
-    if (this.skyBg) this.skyBg.style.display = '';
-    document.body.classList.remove('game-active');
-    this.startScreen.style.display = 'flex';
+    this.screens.showLevelStartScreen(levelIndex);
   }
 
-  showStartScreen() {
-    this.showLevelStartScreen(0);
+  /**
+   * Common game start: show canvas, create Game, run loop.
+   * @param {Object} levelConfig - Level config from LEVELS or getEndlessConfig().
+   * @param {boolean} isEndless - true for time_attack / until_lose modes.
+   * @private
+   */
+  _startGame(levelConfig, isEndless) {
+    const d = this.dom;
+    d.startScreen.style.display = 'none';
+    this.canvas.style.display = 'block';
+    d.gameOverScreen.style.display = 'none';
+    this.screens.hideAllModeScreens();
+    if (d.skyBg) d.skyBg.style.display = 'none';
+    document.body.classList.add('game-active');
+
+    if (this.game) this.stopAnimation();
+
+    this.currentGameIsEndless = isEndless;
+    this.gameOverSoundPlayed = false;
+    this.winSoundPlayed = false;
+    this.game = new Game(this.canvas.width, this.canvas.height, levelConfig, this.audioManager);
+    this.game.time = 0;
+    this.game.gamePause = false;
+    this.lastTime = performance.now();
+    this.animate(this.lastTime);
   }
 
+  /** @param {number} levelIndex */
   startGame(levelIndex) {
-    this.startScreen.style.display = 'none';
-    this.canvas.style.display = 'block';
-    this.gameOverScreen.style.display = 'none';
-    this.hideAllModeScreens();
-    if (this.skyBg) this.skyBg.style.display = 'none';
-    document.body.classList.add('game-active');
-
-    if (this.game) this.stopAnimation();
-
-    this.currentGameIsEndless = false;
-    this.gameOverSoundPlayed = false;
-    this.winSoundPlayed = false;
-    const levelConfig = LEVELS[levelIndex];
-    this.game = new Game(this.canvas.width, this.canvas.height, levelConfig, this.audioManager);
-    this.game.time = 0;
-    this.game.gamePause = false;
-    this.lastTime = performance.now();
-    this.animate(this.lastTime);
+    this._startGame(LEVELS[levelIndex], false);
   }
 
+  /** @param {Object} levelConfig - Level config from getEndlessConfig(). */
   startGameWithConfig(levelConfig) {
-    this.startScreen.style.display = 'none';
-    this.canvas.style.display = 'block';
-    this.gameOverScreen.style.display = 'none';
-    this.hideAllModeScreens();
-    if (this.skyBg) this.skyBg.style.display = 'none';
-    document.body.classList.add('game-active');
-
-    if (this.game) this.stopAnimation();
-
-    this.currentGameIsEndless = true;
-    this.gameOverSoundPlayed = false;
-    this.winSoundPlayed = false;
-    this.game = new Game(this.canvas.width, this.canvas.height, levelConfig, this.audioManager);
-    this.game.time = 0;
-    this.game.gamePause = false;
-    this.lastTime = performance.now();
-    this.animate(this.lastTime);
+    this._startGame(levelConfig, true);
   }
 
+  /** Restart current level (same level config). */
   restartGame() {
     if (!this.game) return;
     this.stopAnimation();
@@ -293,6 +105,7 @@ export class GameController {
     }
   }
 
+  /** Toggle pause; focus moves to Continue when paused. */
   pauseGame() {
     if (!this.game) return;
     this.game.gamePause = !this.game.gamePause;
@@ -305,43 +118,37 @@ export class GameController {
 
   addEventListeners() {
     const controller = this;
+    const d = this.dom;
 
-    document.getElementById('playCatGame').addEventListener('click', () => {
+    d.playCatGame.addEventListener('click', () => {
       controller.audioManager.playMusic('background');
       controller.showLevelStartScreen(0);
     });
 
-    document.getElementById('btnUserNew').addEventListener('click', () => {
-      controller.setUserType('new');
-    });
-    document.getElementById('btnUserPlayed').addEventListener('click', () => {
-      controller.setUserType('played');
-    });
+    d.btnUserNew.addEventListener('click', () => controller.setUserType('new'));
+    d.btnUserPlayed.addEventListener('click', () => controller.setUserType('played'));
+    d.startButton.addEventListener('click', () => controller.startGame(controller.currentLevelIndex));
 
-    document.getElementById('startButton').addEventListener('click', () => {
-      controller.startGame(controller.currentLevelIndex);
-    });
-
-    document.getElementById('btnPlayForTime').addEventListener('click', () => {
+    d.btnPlayForTime.addEventListener('click', () => {
       controller.fromStartScreenForMode = true;
-      controller.startScreen.style.display = 'none';
-      controller.timeAttackSelect.style.display = 'flex';
+      d.startScreen.style.display = 'none';
+      d.timeAttackSelect.style.display = 'flex';
     });
-    document.getElementById('btnPlayForPoints').addEventListener('click', () => {
+    d.btnPlayForPoints.addEventListener('click', () => {
       controller.fromStartScreenForMode = true;
-      controller.startScreen.style.display = 'none';
-      controller.untilLoseSelect.style.display = 'flex';
+      d.startScreen.style.display = 'none';
+      d.untilLoseSelect.style.display = 'flex';
     });
 
-    this.pauseScreen.querySelector('#continueButton').addEventListener('click', () => controller.pauseGame());
+    d.pauseScreen.querySelector('#continueButton').addEventListener('click', () => controller.pauseGame());
 
-    this.gameOverScreen.querySelector('#restartButton').addEventListener('click', () => {
-      controller.gameOverScreen.style.display = 'none';
+    d.gameOverScreen.querySelector('#restartButton').addEventListener('click', () => {
+      d.gameOverScreen.style.display = 'none';
       controller.restartGame();
     });
 
-    this.gameOverScreen.querySelector('#nextLevelButton').addEventListener('click', () => {
-      controller.gameOverScreen.style.display = 'none';
+    d.gameOverScreen.querySelector('#nextLevelButton').addEventListener('click', () => {
+      d.gameOverScreen.style.display = 'none';
       if (controller.currentLevelIndex + 1 < TOTAL_LEVELS) {
         controller.showLevelStartScreen(controller.currentLevelIndex + 1);
       } else {
@@ -349,13 +156,13 @@ export class GameController {
       }
     });
 
-    this.gameOverScreen.querySelector('#chooseModeButton').addEventListener('click', () => {
-      controller.gameOverScreen.style.display = 'none';
-      controller.modeSelectScreen.style.display = 'flex';
+    d.gameOverScreen.querySelector('#chooseModeButton').addEventListener('click', () => {
+      d.gameOverScreen.style.display = 'none';
+      d.modeSelectScreen.style.display = 'flex';
     });
 
-    this.gameOverScreen.querySelector('#mainMenuButton').addEventListener('click', () => {
-      controller.gameOverScreen.style.display = 'none';
+    d.gameOverScreen.querySelector('#mainMenuButton').addEventListener('click', () => {
+      d.gameOverScreen.style.display = 'none';
       controller.showMainMenu();
     });
 
@@ -369,20 +176,33 @@ export class GameController {
     const deltaTime = timeStamp - this.lastTime;
     this.lastTime = timeStamp;
 
+    const d = this.dom;
     if (!this.game.gamePause) {
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
       this.game.update(deltaTime);
       this.game.draw(this.ctx);
-      this.pauseScreen.style.display = 'none';
+      d.pauseScreen.style.display = 'none';
+      this._pauseFocusSet = false;
     } else {
-      this.pauseScreen.style.display = 'flex';
+      d.pauseScreen.style.display = 'flex';
+      if (!this._pauseFocusSet) {
+        this._pauseFocusSet = true;
+        const continueBtn = d.pauseScreen.querySelector('#continueButton');
+        if (continueBtn && typeof continueBtn.focus === 'function') continueBtn.focus();
+      }
     }
 
     if (!this.game.gameOver) {
-      this.gameOverScreen.style.display = 'none';
+      d.gameOverScreen.style.display = 'none';
+      this._gameOverFocusSet = false;
       this.animationId = requestAnimationFrame(this.animate.bind(this));
     } else {
-      this.gameOverScreen.style.display = 'flex';
+      d.gameOverScreen.style.display = 'flex';
+      if (!this._gameOverFocusSet) {
+        this._gameOverFocusSet = true;
+        const restartBtn = d.gameOverScreen.querySelector('#restartButton');
+        if (restartBtn && typeof restartBtn.focus === 'function') restartBtn.focus();
+      }
       if (!this.game.win && !this.gameOverSoundPlayed) {
         this.audioManager.playSfx('gameOver');
         this.gameOverSoundPlayed = true;
@@ -390,8 +210,8 @@ export class GameController {
         this.audioManager.playSfx('win');
         this.winSoundPlayed = true;
       }
-      const nextBtn = this.gameOverScreen.querySelector('#nextLevelButton');
-      const chooseModeBtn = this.gameOverScreen.querySelector('#chooseModeButton');
+      const nextBtn = d.gameOverScreen.querySelector('#nextLevelButton');
+      const chooseModeBtn = d.gameOverScreen.querySelector('#chooseModeButton');
       const hasNext = this.currentLevelIndex + 1 < TOTAL_LEVELS;
       const showNextLevel = this.game.win && hasNext && !this.currentGameIsEndless;
       const isLevel5Win = this.game.win && this.currentLevelIndex === TOTAL_LEVELS - 1 && !this.currentGameIsEndless;

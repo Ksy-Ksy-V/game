@@ -1,5 +1,6 @@
 import { CONFIG } from '../config/config.js';
 import { LEVELS } from '../config/levels.js';
+import { MODES, ENEMY_TYPES, FRIEND_TYPES } from '../config/constants.js';
 import { Player } from '../entities/player.js';
 import { InputHandler } from '../input/input.js';
 import { Background } from '../world/background.js';
@@ -9,26 +10,38 @@ import { GroundFriend } from '../entities/hearts.js';
 import { UI } from '../ui/UI.js';
 import { states } from '../entities/playerStates.js';
 
+/**
+ * Game state and loop: world, player, enemies, friends, win/lose rules.
+ * Updated and drawn each frame by GameController.animate().
+ */
 export class Game {
+  /**
+   * @param {number} width - Canvas width.
+   * @param {number} height - Canvas height.
+   * @param {Object} levelConfig - Level config from LEVELS or getEndlessConfig().
+   * @param {import('../audio/AudioManager.js').AudioManager|null} [audioManager]
+   */
   constructor(width, height, levelConfig, audioManager = null) {
     this.width = width;
     this.height = height;
     this.levelConfig = levelConfig || LEVELS[0];
     this.levelIndex = this.levelConfig.index;
     this.audioManager = audioManager;
+    this.input = new InputHandler(this);
     this.reset();
   }
 
+  /** Reset game state for current level (used on restart). */
   reset() {
     const g = CONFIG.game;
     const l = this.levelConfig;
 
+    this.input.clearKeys();
     this.groundMargin = g.groundMargin;
     this.speed = 0;
     this.maxSpeed = CONFIG.game.maxSpeed * (l.speedModifier ?? 1);
     this.background = new Background(this);
     this.player = new Player(this);
-    this.input = new InputHandler(this);
     this.UI = new UI(this);
 
     this.enemies = [];
@@ -62,6 +75,10 @@ export class Game {
     this.player.currentState.enter();
   }
 
+  /**
+   * Update game state (time, win/lose, entities).
+   * @param {number} deltaTime - Time since last frame (ms).
+   */
   update(deltaTime) {
     this.time += deltaTime;
     // FPS-independent movement: factor ≈ 1 at 60 FPS (16.67 ms/frame), capped to avoid spikes
@@ -71,12 +88,12 @@ export class Game {
     const l = this.levelConfig;
     const mode = l.mode;
 
-    if (mode === 'time_attack') {
+    if (mode === MODES.TIME_ATTACK) {
       if (this.maxTime != null && this.time > this.maxTime) {
         this.gameOver = true;
         this.win = true;
       }
-    } else if (mode === 'until_lose') {
+    } else if (mode === MODES.UNTIL_LOSE) {
       if (this.hearts <= 0) {
         this.gameOver = true;
         this.win = false;
@@ -111,7 +128,7 @@ export class Game {
     }
     this.enemies.forEach((enemy) => enemy.update(deltaTime, this.deltaFactor));
 
-    if (this.levelConfig.friends.includes('flying')) {
+    if (this.levelConfig.friends.includes(FRIEND_TYPES.FLYING)) {
       if (this.friendTimer > this.friendInterval) {
         this.addFriend();
         this.friendTimer = 0;
@@ -123,7 +140,7 @@ export class Game {
 
     this.heartsFriend.forEach((heartFriend) => heartFriend.update(deltaTime, this.deltaFactor));
 
-    if (this.levelConfig.friends.includes('hearts')) {
+    if (this.levelConfig.friends.includes(FRIEND_TYPES.HEARTS)) {
       if (this.heartsFriendTimer > this.heartsFriendInterval) {
         this.addHearts();
         this.heartsFriendTimer = 0;
@@ -149,6 +166,10 @@ export class Game {
     this.floatingMessages = this.floatingMessages.filter((message) => !message.markedForDeletion);
   }
 
+  /**
+   * Draw background, entities, UI.
+   * @param {CanvasRenderingContext2D} context
+   */
   draw(context) {
     this.background.draw(context);
     this.particles.forEach((particle) => particle.draw(context));
@@ -167,19 +188,19 @@ export class Game {
 
     const types = this.levelConfig.enemies;
     if (this.speed > 0) {
-      if (types.includes('ground') && Math.random() < 0.5) this.enemies.push(new GroundEnemy(this));
-      else if (types.includes('climbing')) this.enemies.push(new ClimbingEnemy(this));
+      if (types.includes(ENEMY_TYPES.GROUND) && Math.random() < 0.5) this.enemies.push(new GroundEnemy(this));
+      else if (types.includes(ENEMY_TYPES.CLIMBING)) this.enemies.push(new ClimbingEnemy(this));
     }
-    if (types.includes('flying')) this.enemies.push(new FlyingEnemy(this));
+    if (types.includes(ENEMY_TYPES.FLYING)) this.enemies.push(new FlyingEnemy(this));
   }
 
   addFriend() {
-    if (this.friends.length >= CONFIG.game.maxFriendsOnScreen || !this.levelConfig.friends.includes('flying')) return;
+    if (this.friends.length >= CONFIG.game.maxFriendsOnScreen || !this.levelConfig.friends.includes(FRIEND_TYPES.FLYING)) return;
     if (this.speed > 0 && Math.random() < 0.5) this.friends.push(new FlyingFriend(this));
   }
 
   addHearts() {
-    if (!this.levelConfig.friends.includes('hearts') || this.heartsFriend.length >= 1) return;
+    if (!this.levelConfig.friends.includes(FRIEND_TYPES.HEARTS) || this.heartsFriend.length >= 1) return;
     const maxHearts = CONFIG.game.maxHearts;
     if (this.hearts < maxHearts) this.heartsFriend.push(new GroundFriend(this));
   }

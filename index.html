@@ -15,6 +15,10 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body class="retro-body">
+    <div id="loadingOverlay" class="loading-overlay" aria-live="polite" aria-busy="true">
+      <p class="loading-text">Loading…</p>
+      <p class="loading-error" style="display: none;"></p>
+    </div>
     <div class="sky-bg">
       <div class="cloud-sprite cloud-sprite-1 cloud-1" aria-hidden="true"></div>
       <div class="cloud-sprite cloud-sprite-2 cloud-2" aria-hidden="true"></div>
@@ -25,7 +29,7 @@
       <div class="cloud-sprite cloud-sprite-3 cloud-7" aria-hidden="true"></div>
       <div class="cloud-sprite cloud-sprite-4 cloud-8" aria-hidden="true"></div>
     </div>
-    <div id="mainMenu" class="pixel-panel pixel-panel-main">
+    <main id="mainMenu" class="pixel-panel pixel-panel-main" role="main" aria-label="Main menu">
       <h1 class="pixel-title">PIXEL PLAY</h1>
       <p class="pixel-subtitle">&gt; RETRO GAME PLATFORM &lt;</p>
       <div class="game-list">
@@ -33,7 +37,7 @@
       </div>
     </div>
 
-    <div id="startScreen" class="pixel-panel pixel-panel-choose" style="display: none">
+    <section id="startScreen" class="pixel-panel pixel-panel-choose" style="display: none" aria-label="Level start and controls">
       <h1 id="startScreenTitle" class="pixel-panel-title">CHOOSE GAME</h1>
       <div class="user-type-switcher">
         <button type="button" class="user-type-btn active" data-type="new" id="btnUserNew">New user</button>
@@ -110,7 +114,7 @@
       </div>
     </div>
 
-    <canvas id="canvas1"></canvas>
+    <canvas id="canvas1" role="img" aria-label="Game view, 2D platformer"></canvas>
 
     <img id="player" src="img/player/player.png" />
 

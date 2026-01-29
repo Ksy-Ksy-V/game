@@ -1,5 +1,7 @@
 /**
  * Game configuration. All magic numbers are collected here for easy balancing and maintenance.
+ * @module config/config
+ * @type {{ canvas: { width: number, height: number }, game: Object, player: Object, background: Object, floatingMessage: Object }}
  */
 export const CONFIG = {
   canvas: {

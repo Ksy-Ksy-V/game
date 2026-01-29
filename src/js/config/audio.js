@@ -1,5 +1,7 @@
 /**
  * Paths to audio files. Relative to project root (index.html).
+ * @module config/audio
+ * @type {{ music: Object.<string, string>, sfx: Object.<string, string> }}
  */
 export const AUDIO = {
   music: {
